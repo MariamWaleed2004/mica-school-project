@@ -6,7 +6,7 @@ class GetSingleUserUsecase {
 
   GetSingleUserUsecase({required this.repository});
 
-  Stream<List<UserEntity>> call(String uid) {
+  Future<UserEntity> call(String uid) {
     return repository.getSingleUser(uid);
   }
 }

@@ -39,7 +39,7 @@ class AuthCubit extends Cubit<AuthState> {
       final uid = await getCurrentUidUsecase.call();
       emit(Authenticated(uid: uid));
     } catch (_) {
-      toast("Invalid email or password");
+      toast("Invalid id or password");
       emit(UnAuthenticated());
     }
   }

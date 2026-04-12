@@ -7,7 +7,7 @@ import 'package:mica_school_app/features/authentication/domain/entities/user_ent
 
 abstract class AuthRemoteDataSource {
 
-  Future<void> signInUser(UserEntity user, BuildContext context);
+  Future<UserEntity> signInUser(UserEntity user, BuildContext context);
 
   // Future<void> signUpUser(UserEntity user, BuildContext context);
   
@@ -15,7 +15,7 @@ abstract class AuthRemoteDataSource {
 
   Future<void> signOut(); 
 
-  Future<void> createUser(UserEntity user);
+ // Future<void> createUser(UserEntity user);
 
   Future<String> getCurrentUid();
 
@@ -23,7 +23,7 @@ abstract class AuthRemoteDataSource {
 
   Stream<List<UserEntity>> getUsers(UserEntity user);
 
-  Stream<List<UserEntity>> getSingleUser(String uid);
+  Future<UserEntity> getSingleUser(String uid);
 
   // Future<void> updateUser(UserEntity user);
 

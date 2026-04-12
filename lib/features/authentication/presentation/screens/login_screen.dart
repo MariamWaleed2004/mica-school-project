@@ -1,17 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mica_school_app/Home.dart';
+import 'package:mica_school_app/features/authentication/presentation/cubit/credential_cubit/credential_state.dart';
+import 'package:mica_school_app/features/home/presentation/screens/home_screen.dart';
+import 'package:mica_school_app/core/const.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/credential_cubit/credential_cubit.dart';
 import 'package:mica_school_app/features/authentication/presentation/widgets/login_bg_painter_widget.dart';
 import 'package:mica_school_app/features/authentication/presentation/widgets/text_field_widget.dart';
+import 'package:mica_school_app/main_page.dart';
 
 class LoginScreen extends StatefulWidget {
-  final Function(BuildContext, bool) onLogin;
+  // final Function(BuildContext, bool) onLogin;
   final bool isArabic;
-  const LoginScreen({Key? key, required this.onLogin, required this.isArabic})
-    : super(key: key);
+  const LoginScreen({Key? key, required this.isArabic}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -30,6 +32,16 @@ class _LoginScreenState extends State<LoginScreen>
   late Animation<double> _formFade;
   late Animation<Offset> _formSlide;
   bool _isSigningIn = false;
+
+  bool isDarkMode = false;
+  bool isArabic = true;
+
+  void toggleTheme() => setState(() => isDarkMode = !isDarkMode);
+  void toggleLanguage() => setState(() => isArabic = !isArabic);
+
+  bool _emailError = false;
+  bool _passwordError = false;
+  bool _validateErrorMessage = false;
 
   @override
   void initState() {
@@ -106,13 +118,13 @@ class _LoginScreenState extends State<LoginScreen>
                     fontSize: 13,
                   ),
                 ),
-                const SizedBox(height: 20),
-                _buildTextField(
-                  "example@university.edu",
-                  Icons.email_outlined,
-                  false,
-                  isDark,
-                ),
+                // const SizedBox(height: 20),
+                // _buildTextField(
+                //   "example@university.edu",
+                //   Icons.email_outlined,
+                //   false,
+                //   isDark,
+                // ),
                 const SizedBox(height: 24),
                 Row(
                   children: [
@@ -169,6 +181,44 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
+  bool _validatePassword(String password) {
+    return password.isNotEmpty;
+  }
+
+  bool _validateId(String id) {
+    final regex = RegExp(r'^[a-zA-Z0-9_]{4,20}$');
+    return regex.hasMatch(id);
+  }
+
+  String? _validateField(String? value, String fieldType) {
+    if (fieldType == "email" && !_validateId(value!)) {
+      return "Please enter a valid email address.";
+    }
+
+    if (fieldType == "password" && !_validatePassword(value!)) {
+      return "Please enter a valid password";
+    }
+
+    return null;
+  }
+
+  void _onTextChanged(String value, String field) {
+    setState(() {
+      final error = _validateField(value, field);
+
+      switch (field) {
+        case "email":
+          _emailError = error != null;
+          _validateErrorMessage = error != null;
+          break;
+        case "password":
+          _passwordError = error != null;
+          break;
+      }
+    });
+  }
+
+  // -------------------------------------------------- Build Method ------------------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -199,7 +249,13 @@ class _LoginScreenState extends State<LoginScreen>
             return BlocBuilder<AuthCubit, AuthState>(
               builder: (context, authState) {
                 if (authState is Authenticated) {
-                  return HomePage();
+                  return MainPage(
+                    isDarkMode: isDarkMode,
+                    isArabic: isArabic,
+                    onThemeToggle: toggleTheme,
+                    onLanguageToggle: toggleLanguage,
+                  );
+                  ;
                 } else {
                   return _bodyWidget();
                 }
@@ -213,6 +269,8 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   _bodyWidget() {
+    double width = AppSizes.screenWidth(context);
+    double height = AppSizes.screenHeight(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Form(
@@ -262,7 +320,7 @@ class _LoginScreenState extends State<LoginScreen>
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-          // ========================== School Logo ================================
+                          // ========================== School Logo ================================
                           Container(
                             width: 100,
                             height: 100,
@@ -302,7 +360,7 @@ class _LoginScreenState extends State<LoginScreen>
                               ),
                             ),
                           ),
-            // ========================== School Name ==============================
+                          // ========================== School Name ==============================
                           const SizedBox(height: 20),
                           ShaderMask(
                             shaderCallback: (bounds) => const LinearGradient(
@@ -328,89 +386,139 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ),
                           const SizedBox(height: 32),
-           // =========================== Student ID Field =============================
+                          // =========================== Student ID Field =============================
                           LoginTextField(
                             hint: 'Student ID',
                             icon: Icons.badge_rounded,
                             isPassword: false,
                             isDark: isDark,
                             controller: _studentIdController,
+                            onChanged: (value) =>
+                                _onTextChanged(value, "email"),
+                            validator: (value) =>
+                                _validateField(value, "email"),
                           ),
                           const SizedBox(height: 14),
-           // =========================== Password Field =============================
+                          // =========================== Password Field =============================
                           LoginTextField(
                             hint: 'Password',
                             icon: Icons.lock_rounded,
                             isPassword: true,
                             isDark: isDark,
                             controller: _passwordController,
+                            onChanged: (value) =>
+                                _onTextChanged(value, "password"),
+                            validator: (value) =>
+                                _validateField(value, "password"),
                           ),
                           const SizedBox(height: 28),
-           // =========================== Login Button ==============================
-                          GestureDetector(
-                            onTap: () {
-                              final studentId = _studentIdController.text
-                                  .trim();
-                              final password = _passwordController.text.trim();
 
-                              if (studentId.isEmpty || password.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: const Text("برجاء إدخال البيانات"),
-                                    behavior: SnackBarBehavior.floating,
-                                    backgroundColor: Colors.redAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                  ),
-                                );
-                                return;
-                              }
-                              _isSigningIn
+                          // =========================== Login Button ==============================
+                          Container(
+                            width: double.infinity, // full width
+                            height: 50, // height of the button
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color(0xFF4F46E5),
+                                  Color(0xFF06B6D4),
+                                ], // your gradient colors
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: ElevatedButton(
+                              onPressed: _isSigningIn
                                   ? null
                                   : () {
                                       if (_formKey.currentState!.validate()) {
                                         _signInUser();
                                       }
-                                    };
-                            },
-                            child: Container(
-                              height: 56,
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    Color(0xFF4F46E5),
-                                    Color(0xFF06B6D4),
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                ),
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(
-                                      0xFF4F46E5,
-                                    ).withOpacity(0.4),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 8),
-                                  ),
-                                ],
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "Login",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 0.5,
-                                  ),
+                                    },
+
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors
+                                    .transparent, // Make button transparent
+                                shadowColor:
+                                    Colors.transparent, // Remove default shadow
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
                               ),
+                              child: _isSigningIn == false
+                                  ? Text(
+                                      'Sign In',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Signing In',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        SizedBox(width: width * 0.01),
+                                        SizedBox(
+                                          width: 16,
+                                          height: 16,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor: AlwaysStoppedAnimation(
+                                              Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                             ),
                           ),
+
+                          // GestureDetector(
+                          //   child: Container(
+                          //     height: 56,
+                          //     decoration: BoxDecoration(
+                          //       gradient: const LinearGradient(
+                          //         colors: [
+                          //           Color(0xFF4F46E5),
+                          //           Color(0xFF06B6D4),
+                          //         ],
+                          //         begin: Alignment.centerLeft,
+                          //         end: Alignment.centerRight,
+                          //       ),
+                          //       borderRadius: BorderRadius.circular(16),
+                          //       boxShadow: [
+                          //         BoxShadow(
+                          //           color: const Color(
+                          //             0xFF4F46E5,
+                          //           ).withOpacity(0.4),
+                          //           blurRadius: 20,
+                          //           offset: const Offset(0, 8),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     child: const Center(
+                          //       child: Text(
+                          //         "Login",
+                          //         style: TextStyle(
+                          //           color: Colors.white,
+                          //           fontSize: 16,
+                          //           fontWeight: FontWeight.w700,
+                          //           letterSpacing: 0.5,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           const SizedBox(height: 16),
-            // =========================== Forgot Password Link =============================
+                          // =========================== Forgot Password Link =============================
                           TextButton(
                             onPressed: _showForgotPasswordDialog,
                             child: Text(
@@ -460,6 +568,4 @@ class _LoginScreenState extends State<LoginScreen>
       _isSigningIn = false;
     });
   }
-
-
 }

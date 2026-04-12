@@ -6,6 +6,9 @@ class LoginTextField extends StatefulWidget {
   final bool isPassword;
   final bool isDark;
   final TextEditingController? controller;
+  final Function(String)? onChanged;
+  final FormFieldValidator<String>? validator;
+
 
   const LoginTextField({
     super.key,
@@ -14,6 +17,8 @@ class LoginTextField extends StatefulWidget {
     required this.isPassword,
     required this.isDark,
     this.controller,
+    this.onChanged,
+    this.validator,
   });
 
   @override
@@ -44,6 +49,8 @@ class _LoginTextFieldState extends State<LoginTextField> {
           color: widget.isDark ? Colors.white : Colors.black87,
           fontSize: 15,
         ),
+        onChanged: widget.onChanged,
+        validator: widget.validator,
         decoration: InputDecoration(
           hintText: widget.hint,
           hintStyle: TextStyle(

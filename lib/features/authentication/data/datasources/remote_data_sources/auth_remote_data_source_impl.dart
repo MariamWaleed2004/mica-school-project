@@ -23,28 +23,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required this.firebaseStorage,
   });
 
-  @override
-  Future<void> createUser(UserEntity user) async {
-    final userCollection = firebaseFirestore.collection(FirebaseConst.users);
-
-    final uid = await getCurrentUid();
-
-    userCollection.doc(uid).get().then((userDoc) {
-      final newUser = UserModel(
-        uid: uid,
-        name: user.name,
-        id: user.id,
-      ).toJson();
-
-      if (!userDoc.exists) {
-        userCollection.doc(uid).set(newUser);
-      } else {
-        userCollection.doc(uid).update(newUser);
-      }
-    }).catchError((error) {
-      toast("some error occur");
-    });
-  }
 
   @override
   Future<String> getCurrentUid() async => firebaseAuth.currentUser!.uid;
@@ -52,101 +30,61 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<bool> isSignIn() async => firebaseAuth.currentUser?.uid != null;
 
-  @override
-  Future<void> signInUser(UserEntity user, BuildContext context) async {
-    try {
-      final email = "${user.id}@mica.com"; 
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email, password: user.password!);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-        _showInvalidEmailOrPasswordDialog(context);
-      } else {
-        toast(e.message ?? 'Something went wrong');
-      }
+@override
+Future<UserEntity> signInUser(UserEntity user, BuildContext context) async {
+  try {
+    final email = "${user.id}@mica.com";
+
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: user.password!,
+    );
+
+    // 🔥 AFTER LOGIN SUCCESS → FETCH USER FROM FIRESTORE
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get();
+
+    if (!doc.exists) {
+      throw Exception("User data not found");
     }
 
-    // try {
-    //   final methods =
-    //       await firebaseAuth.fetchSignInMethodsForEmail(user.email!);
-    //   if (methods.isEmpty) {
-    //     _showIfAccountNotExistsDialog(context);
-    //   } else {
-    //     await firebaseAuth.signInWithEmailAndPassword(
-    //         email: user.email!, password: user.password!);
-    //   }
-    // } on FirebaseAuthException catch (e) {
-    //   if (e.code == "wrong-password") {
-    //     print("errorrrrrrrrrrrrrrrrrrrrrrrrrrrr");
-    //   }
-    // }
+    return UserModel.fromSnapshot(doc);
+
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+      _showInvalidEmailOrPasswordDialog(context);
+    } else {
+      toast(e.message ?? 'Something went wrong');
+    }
+
+    throw Exception("Login failed");
   }
+}
 
   @override
   Future<void> signOut() async {
     await firebaseAuth.signOut();
   }
 
-  // @override
-  // Future<void> signUpUser(UserEntity user, BuildContext context) async {
-  //   try {
-  //     final methods =
-  //         await firebaseAuth.fetchSignInMethodsForEmail(user.email!);
-  //     if (methods.isNotEmpty) {
-  //       _showIfAccountExistsDialog(context);
-  //       return;
-  //     } else {
-  //       UserCredential userCredential =
-  //           await firebaseAuth.createUserWithEmailAndPassword(
-  //         email: user.email!,
-  //         password: user.password!,
-  //       );
+@override
+Future<UserEntity> getSingleUser(String uid) async {
+  final doc = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(uid)
+      .get();
 
-  //       if (userCredential.user != null) {
-  //         await createUser(user);
-
-  //         try {
-  //           await userCredential.user!.sendEmailVerification();
-  //           Navigator.pushNamed(context, ScreenConst.verificationScreen);
-  //         } catch (e) {
-  //           toast("Failed to send verification email: $e");
-  //         }
-  //       }
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     toast('Something went wrong');
-
-       //    if (e.code == 'email-already-in-use') {
-       //    _showIfAccountExistsDialog;
-       // } else {
-       // }
-  //   }
-  // }
-// -----------------------------------------------------------------------------------------------------
-  // @override
-  // Future<String> uploadImageToStorage(
-  //     File? file, bool isPost, String childName) async {
-  //   final ref = FirebaseStorage.instance
-  //       .ref()
-  //       .child(childName)
-  //       .child('${firebaseAuth.currentUser!.uid}.jpg');
-
-  //   await ref.putFile(file!);
-  //   final imageUrl = ref.getDownloadURL();
-
-  //   return await imageUrl;
-  // }
-
-  @override
-  Stream<List<UserEntity>> getSingleUser(String uid) {
-    final userCollection = firebaseFirestore
-        .collection(FirebaseConst.users)
-        .where('uid', isEqualTo: uid)
-        .limit(1);
-    return userCollection.snapshots().map((querySnapshot) =>
-        querySnapshot.docs.map((e) => UserModel.fromSnapshot(e)).toList());
+  if (!doc.exists) {
+    throw Exception("User not found");
   }
 
+  final model = UserModel.fromSnapshot(doc);
+
+  return model; // because UserModel extends UserEntity
+}
   @override
   Stream<List<UserEntity>> getUsers(UserEntity user) {
     final userCollection = firebaseFirestore.collection(FirebaseConst.users);
@@ -304,29 +242,29 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         ));
   }
 
-  Future<void> _saveUserToFirestore(User user) async {
-    final userDoc =
-        firebaseFirestore.collection(FirebaseConst.users).doc(user.uid);
+  // Future<void> _saveUserToFirestore(User user) async {
+  //   final userDoc =
+  //       firebaseFirestore.collection(FirebaseConst.users).doc(user.uid);
 
-    final docSnapshot = await userDoc.get();
+  //   final docSnapshot = await userDoc.get();
 
-    // Only add user if they don't already exist
-    if (!docSnapshot.exists) {
-      await userDoc.set({
-        'uid': user.uid,
-        'name': user.displayName ?? "No Name",
-        'email': user.email,
-        'createdAt': FieldValue.serverTimestamp(),
-      });
-    }
+  //   // Only add user if they don't already exist
+  //   if (!docSnapshot.exists) {
+  //     await userDoc.set({
+  //       'uid': user.uid,
+  //       'name': user.displayName ?? "No Name",
+  //       'email': user.email,
+  //       'createdAt': FieldValue.serverTimestamp(),
+  //     });
+  //   }
 
-    if (!(user.emailVerified)) {
-      await user.sendEmailVerification();
-      print("Verification email sent to ${user.email}");
-    } else {
-      print("Account is verified");
-    }
-  }
+  //   if (!(user.emailVerified)) {
+  //     await user.sendEmailVerification();
+  //     print("Verification email sent to ${user.email}");
+  //   } else {
+  //     print("Account is verified");
+  //   }
+  // }
 
 //   @override
 //   Future<UserCredential?> signInWithGoogle(BuildContext context) async {

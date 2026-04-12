@@ -18,31 +18,20 @@ class AuthRepoImpl implements AuthRepo {
   => authRemoteDataSource.isSignIn();
 
   @override
-  Future<void> signInUser(UserEntity user, BuildContext context) async
+  Future<UserEntity> signInUser(UserEntity user, BuildContext context) async
   => authRemoteDataSource.signInUser(user, context);
 
   @override
   Future<void> signOut() async
   => authRemoteDataSource.signOut();
 
-  // @override
-  // Future<void> signUpUser(UserEntity user, BuildContext context) async
-  // => authRemoteDataSource.signUpUser(user, context);
-
-  @override
-  Future<void> createUser(UserEntity user) async 
-  => authRemoteDataSource.createUser(user);
 
   @override
   Future<String> getCurrentUid() async
   => authRemoteDataSource.getCurrentUid();
 
-  //   @override
-  // Future<String> uploadImageToStorage(File? file, bool isPost, String childName) async 
-  // => authRemoteDataSource.uploadImageToStorage(file, isPost, childName);
-  
   @override
-  Stream<List<UserEntity>> getSingleUser(String uid) 
+  Future<UserEntity> getSingleUser(String uid) 
   => authRemoteDataSource.getSingleUser(uid);
   
   
@@ -50,19 +39,5 @@ class AuthRepoImpl implements AuthRepo {
   Stream<List<UserEntity>> getUsers(UserEntity user) 
   => authRemoteDataSource.getUsers(user);
   
-  // @override
-  // Future<void> updateUser(UserEntity user) async 
-  // => authRemoteDataSource.updateUser(user);
 
-  // @override
-  // Future<UserCredential?> signUpWithGoogle(BuildContext context) async
-  // => authRemoteDataSource.signUpWithGoogle(context);
-
-  //   @override
-  // Future<UserCredential?> signInWithGoogle(BuildContext context) async
-  // => authRemoteDataSource.signInWithGoogle(context);
-  
-  
-
-    
 }

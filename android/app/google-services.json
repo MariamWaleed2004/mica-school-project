@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "872504505062",
-    "project_id": "mica-school-app-32842",
-    "storage_bucket": "mica-school-app-32842.firebasestorage.app"
+    "project_number": "219498015860",
+    "firebase_url": "https://mica-school-project-default-rtdb.firebaseio.com",
+    "project_id": "mica-school-project",
+    "storage_bucket": "mica-school-project.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:872504505062:android:b89617400ff7eeb92ac127",
+        "mobilesdk_app_id": "1:219498015860:android:443c62cd3dba04e54ef521",
         "android_client_info": {
           "package_name": "com.example.mica_school_app"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAJ4zKoOxYwV5MZhzHPvYuygVfkFNu_AHc"
+          "current_key": "AIzaSyAec0CXGZts0SpfWUXuCHDRL_EyHel-muY"
         }
       ],
       "services": {

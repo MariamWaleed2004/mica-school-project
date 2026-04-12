@@ -1,27 +1,8 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:homix/core/const.dart';
-// import 'package:homix/features/authentication/presentation/screens/forgot_password_screen.dart';
-// import 'package:homix/features/authentication/presentation/screens/sign_in_screen.dart';
-// import 'package:homix/features/authentication/presentation/screens/sign_up_screen.dart';
-// import 'package:homix/features/authentication/presentation/screens/test.dart';
-// import 'package:homix/features/authentication/presentation/screens/verification_screen.dart';
-// import 'package:homix/features/chat/presentation/navigation/chat_rooms_args.dart';
-// import 'package:homix/features/chat/presentation/screens/chat_room_screen.dart';
-// import 'package:homix/features/chat/presentation/widgets/chat_room_tile.dart';
-// import 'package:homix/features/favorites/presentation/screens/favorites_screen.dart';
-// import 'package:homix/features/home/data/models/property_model.dart';
-// import 'package:homix/features/home/presentation/screens/popular_apartments_screen.dart';
-// import 'package:homix/features/home/presentation/screens/property_details_screen.dart';
-// import 'package:homix/features/home/presentation/screens/map_test_screen.dart';
-// import 'package:homix/features/home/presentation/screens/test_screen.dart';
-// import 'package:homix/features/onboarding_screen/presentation/screens/onboarding_screen.dart';
-// import 'package:homix/features/profile/presentation/screens/personal_information_screen.dart';
-// import 'package:homix/features/profile/presentation/screens/profile_screen.dart';
-// import 'package:homix/features/search/presentation/screens/search_screen.dart';
-// import 'package:homix/main_screen.dart';
-// import 'package:homix/splash_screen.dart';
+// import 'package:mica_school_app/core/const.dart';
+// import 'package:mica_school_app/features/authentication/presentation/screens/login_screen.dart';
 
 // class OnGenerateRoute {
 //   User? user = FirebaseAuth.instance.currentUser;
@@ -32,9 +13,9 @@
 //     switch (settings.name) {
 //       case ScreenConst.signInScreen:
 //         {
-//           return _fadeRoute(SignInScreen());
+//           return _fadeRoute(LoginScreen());
 //         }
-//       case ScreenConst.signUpScreen:
+//       case ScreenConst.loginScreen:
 //         {
 //           return _fadeRoute(SignUpScreen());
 //         }

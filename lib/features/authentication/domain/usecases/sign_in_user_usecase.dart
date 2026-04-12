@@ -7,7 +7,7 @@ class SignInUserUsecase {
 
   SignInUserUsecase({required this.repository});
 
-  Future<void> call(UserEntity user, BuildContext context) {
+  Future<UserEntity> call(UserEntity user, BuildContext context) {
     return repository.signInUser(user, context);
   }
 }

@@ -47,28 +47,32 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAzeVR_esRglJruRBanVcvwkaU42dDPDq4',
-    appId: '1:872504505062:web:626a2d48006cbb2c2ac127',
-    messagingSenderId: '872504505062',
-    projectId: 'mica-school-app-32842',
-    authDomain: 'mica-school-app-32842.firebaseapp.com',
-    storageBucket: 'mica-school-app-32842.firebasestorage.app',
+    apiKey: 'AIzaSyDkj2iEs5UkFNzu1S7PistHPurQFqVe5H0',
+    appId: '1:219498015860:web:b0081d1b100a28b14ef521',
+    messagingSenderId: '219498015860',
+    projectId: 'mica-school-project',
+    authDomain: 'mica-school-project.firebaseapp.com',
+    databaseURL: 'https://mica-school-project-default-rtdb.firebaseio.com',
+    storageBucket: 'mica-school-project.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAJ4zKoOxYwV5MZhzHPvYuygVfkFNu_AHc',
-    appId: '1:872504505062:android:b89617400ff7eeb92ac127',
-    messagingSenderId: '872504505062',
-    projectId: 'mica-school-app-32842',
-    storageBucket: 'mica-school-app-32842.firebasestorage.app',
+    apiKey: 'AIzaSyAec0CXGZts0SpfWUXuCHDRL_EyHel-muY',
+    appId: '1:219498015860:android:443c62cd3dba04e54ef521',
+    messagingSenderId: '219498015860',
+    projectId: 'mica-school-project',
+    databaseURL: 'https://mica-school-project-default-rtdb.firebaseio.com',
+    storageBucket: 'mica-school-project.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCJ5s8fSTWovGOrqMIkv2rFAFEhbl8-PlI',
-    appId: '1:872504505062:ios:1292364bb202f9332ac127',
-    messagingSenderId: '872504505062',
-    projectId: 'mica-school-app-32842',
-    storageBucket: 'mica-school-app-32842.firebasestorage.app',
+    apiKey: 'AIzaSyAQX2JJtL_7CfgCM7L4Fn9WquS-Y9U2l0M',
+    appId: '1:219498015860:ios:9594c5fcb8a52b424ef521',
+    messagingSenderId: '219498015860',
+    projectId: 'mica-school-project',
+    databaseURL: 'https://mica-school-project-default-rtdb.firebaseio.com',
+    storageBucket: 'mica-school-project.firebasestorage.app',
     iosBundleId: 'com.example.micaSchoolApp',
   );
+
 }

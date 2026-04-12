@@ -7,8 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mica_school_app/features/authentication/domain/entities/user_entity.dart';
 import 'package:mica_school_app/features/authentication/domain/usecases/sign_in_user_usecase.dart';
+import 'package:mica_school_app/features/authentication/presentation/cubit/credential_cubit/credential_state.dart';
 
-part 'credential_state.dart';
 
 class CredentialCubit extends Cubit<CredentialState> {
   final SignInUserUsecase signInUserUsecase;
@@ -22,29 +22,35 @@ class CredentialCubit extends Cubit<CredentialState> {
     // required this.signUpWithGoogleUsecase,
   }) : super(CredentialInitial());
 
-  Future<void> signInUser(
-      {required String id,
-      required String password,
-      required BuildContext context}) async {
-    emit(CredentialLoading());
-    try {
-      await signInUserUsecase.call(
-          UserEntity(id: id, password: password), context);
-      final currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser != null) {
-        print("✅ Logged in as: ${currentUser.uid}");
-      } else {
-        print("❌ Login failed - no current user");
-      }
-      emit(CredentialSuccess());
-    } on SocketException catch (_) {
-      emit(CredentialFailure(errorMessage: "No internet connection"));
-    } on TimeoutException catch (e) {
-      emit(CredentialFailure(errorMessage: e.message ?? "Request timed out."));
-    } catch (e) {
-      emit(CredentialFailure(errorMessage: "Signin failed: ${e.toString()}"));
+Future<void> signInUser({
+  required String id,
+  required String password,
+  required BuildContext context,
+}) async {
+  emit(CredentialLoading());
+
+  try {
+    final user = await signInUserUsecase.call(
+      UserEntity(id: id, password: password),
+      context,
+    );
+
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null) {
+      print("✅ Logged in: ${currentUser.uid}");
     }
+
+    emit(CredentialSuccess(user: user));
+
+  } on SocketException {
+    emit(CredentialFailure(errorMessage: "No internet connection"));
+  } on TimeoutException catch (e) {
+    emit(CredentialFailure(errorMessage: e.message ?? "Timeout"));
+  } catch (e) {
+    emit(CredentialFailure(errorMessage: e.toString()));
   }
+}
 
   // Future<void> signUpUser(
   //     {required UserEntity user, required BuildContext context}) async {
