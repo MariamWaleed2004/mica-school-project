@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     context.read<GetSingleUserCubit>().getSingleUser(
-    uid: FirebaseAuth.instance.currentUser!.uid,
+    uid: FirebaseAuth.instance.currentUser!.email!.split('@')[0],
   );
 
     _controller = AnimationController(
@@ -116,8 +116,6 @@ class _HomeScreenState extends State<HomeScreen>
   // ---------------------------------------------------- Build Context ------------------------------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
-    double width = AppSizes.screenWidth(context);
-    double height = AppSizes.screenHeight(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDark ? const Color(0xFF1E293B) : Colors.white;
     final textColor = isDark ? Colors.white : const Color(0xFF0D1333);

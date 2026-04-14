@@ -8,29 +8,19 @@ import 'package:mica_school_app/features/authentication/domain/entities/user_ent
 abstract class AuthRemoteDataSource {
 
   Future<UserEntity> signInUser(UserEntity user, BuildContext context);
-
-  // Future<void> signUpUser(UserEntity user, BuildContext context);
   
   Future<bool> isSignIn();
 
   Future<void> signOut(); 
 
- // Future<void> createUser(UserEntity user);
-
   Future<String> getCurrentUid();
-
-  // Future<String> uploadImageToStorage(File? file, bool isPost, String childName);
 
   Stream<List<UserEntity>> getUsers(UserEntity user);
 
-  Future<UserEntity> getSingleUser(String uid);
+  Future<UserEntity> getSingleUser(String hardwareUid);
 
-  // Future<void> updateUser(UserEntity user);
 
-  
-  // Future<UserCredential?> signUpWithGoogle(BuildContext context);
 
-  // Future<UserCredential?> signInWithGoogle(BuildContext context);
 
 
 

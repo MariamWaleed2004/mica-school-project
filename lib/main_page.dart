@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mica_school_app/Attendance.dart' as attendance;
+import 'package:mica_school_app/features/attendance/presentation/screens/attendance_screen.dart' as attendance;
 import 'package:mica_school_app/Canteen.dart';
 import 'package:mica_school_app/Fees.dart';
 import 'package:mica_school_app/features/home/presentation/screens/home_screen.dart';
@@ -21,6 +23,7 @@ class MainPage extends StatefulWidget {
   final VoidCallback onThemeToggle;
   final VoidCallback onLanguageToggle;
   final String? profileImageUrl;
+
   //final String majorId;
 
   const MainPage({
@@ -38,15 +41,13 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  //final String hardwareUid;
+
   int _selectedIndex = 0;
   XFile? _profileImage;
   final ImagePicker _picker = ImagePicker();
 
-  @override
-  void initState() {
-    super.initState();
-    _loadProfileImage();
-  }
+ 
 
   Future<void> _loadProfileImage() async {
     final prefs = await SharedPreferences.getInstance();
@@ -61,111 +62,134 @@ class _MainPageState extends State<MainPage> {
     await prefs.setString('saved_profile_image', path);
   }
 
-  Future<void> _pickNewImage() async {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        final isDark = Theme.of(context).brightness == Brightness.dark;
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
-          backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF1D4ED8), Color(0xFF0EA5E9)],
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.camera_alt_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                Text(
-                  widget.isArabic
-                      ? "تغيير الصورة الشخصية"
-                      : "Change Profile Photo",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: isDark ? Colors.white : const Color(0xFF0D1333),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  widget.isArabic
-                      ? "هل تريد اختيار صورة جديدة؟"
-                      : "Pick a new photo?",
-                  style: TextStyle(
-                    color: isDark ? Colors.grey[400] : Colors.grey[600],
-                    fontSize: 13,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text(
-                          widget.isArabic ? "إلغاء" : "Cancel",
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Container(
-                        height: 44,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF1D4ED8), Color(0xFF0EA5E9)],
-                          ),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: TextButton(
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            final XFile? image = await _picker.pickImage(
-                              source: ImageSource.gallery,
-                            );
-                            if (image != null) {
-                              setState(() => _profileImage = image);
-                              _saveProfileImage(image.path);
-                            }
-                          },
-                          child: Text(
-                            widget.isArabic ? "اختر صورة" : "Choose",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+
+  Future<void> _loadHardwareUid() async {
+  final firebaseUid = FirebaseAuth.instance.currentUser!.uid;
+
+  final doc = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(firebaseUid)
+      .get();
+
+  if (doc.exists) {
+    setState(() {
+      //widget.hardwareUid = doc['id']; // ده الـ hardware uid
+    });
+  }
+}
+ @override
+  void initState() {
+    super.initState();
+    _loadProfileImage();
+    _loadHardwareUid();
   }
 
+  // Future<void> _pickNewImage() async {
+  //   return showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       final isDark = Theme.of(context).brightness == Brightness.dark;
+  //       return Dialog(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(24),
+  //         ),
+  //         backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(24),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Container(
+  //                 width: 52,
+  //                 height: 52,
+  //                 decoration: const BoxDecoration(
+  //                   shape: BoxShape.circle,
+  //                   gradient: LinearGradient(
+  //                     colors: [Color(0xFF1D4ED8), Color(0xFF0EA5E9)],
+  //                   ),
+  //                 ),
+  //                 child: const Icon(
+  //                   Icons.camera_alt_rounded,
+  //                   color: Colors.white,
+  //                   size: 24,
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 14),
+  //               Text(
+  //                 widget.isArabic
+  //                     ? "تغيير الصورة الشخصية"
+  //                     : "Change Profile Photo",
+  //                 style: TextStyle(
+  //                   fontWeight: FontWeight.bold,
+  //                   fontSize: 16,
+  //                   color: isDark ? Colors.white : const Color(0xFF0D1333),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 8),
+  //               Text(
+  //                 widget.isArabic
+  //                     ? "هل تريد اختيار صورة جديدة؟"
+  //                     : "Pick a new photo?",
+  //                 style: TextStyle(
+  //                   color: isDark ? Colors.grey[400] : Colors.grey[600],
+  //                   fontSize: 13,
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 20),
+  //               Row(
+  //                 children: [
+  //                   Expanded(
+  //                     child: TextButton(
+  //                       onPressed: () => Navigator.pop(context),
+  //                       child: Text(
+  //                         widget.isArabic ? "إلغاء" : "Cancel",
+  //                         style: const TextStyle(color: Colors.grey),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(width: 12),
+  //                   Expanded(
+  //                     child: Container(
+  //                       height: 44,
+  //                       decoration: BoxDecoration(
+  //                         gradient: const LinearGradient(
+  //                           colors: [Color(0xFF1D4ED8), Color(0xFF0EA5E9)],
+  //                         ),
+  //                         borderRadius: BorderRadius.circular(14),
+  //                       ),
+  //                       child: TextButton(
+  //                         onPressed: () async {
+  //                           Navigator.pop(context);
+  //                           final XFile? image = await _picker.pickImage(
+  //                             source: ImageSource.gallery,
+  //                           );
+  //                           if (image != null) {
+  //                             setState(() => _profileImage = image);
+  //                             _saveProfileImage(image.path);
+  //                           }
+  //                         },
+  //                         child: Text(
+  //                           widget.isArabic ? "اختر صورة" : "Choose",
+  //                           style: const TextStyle(
+  //                             color: Colors.white,
+  //                             fontWeight: FontWeight.bold,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   List<Widget> _getPages() {
+   // if (hardwareUid == null) { return const Center(child: CircularProgressIndicator()); }
     return [
       HomeScreen(
         isArabic: widget.isArabic,
@@ -173,21 +197,22 @@ class _MainPageState extends State<MainPage> {
         onNavigate: _handleNavigation,
       ),
       profile.ProfilePage(
-        isArabic: widget.isArabic,
-        texts: const {},
-        profileImage: _profileImage,
+        // isArabic: widget.isArabic,
+        // texts: const {},
+        // profileImage: _profileImage,
       ),
       CanteenPage(isArabic: widget.isArabic, isDarkMode: widget.isDarkMode),
-      attendance.AttendancePage(
+      attendance.AttendanceScreen(
+        //userId: widget.hardwareUid,
         isArabic: widget.isArabic,
         isDarkMode: widget.isDarkMode,
         texts: const {},
       ),
-      // ✅ profileImage بيتمرر هنا عشان الصورة تتزامن مع باقي التطبيق
+
       LogsPage(
-        isArabic: widget.isArabic,
-        isDarkMode: widget.isDarkMode,
-        profileImage: _profileImage,
+        // isArabic: widget.isArabic,
+        // isDarkMode: widget.isDarkMode,
+        // profileImage: _profileImage,
       ),
     ];
   }
@@ -458,45 +483,45 @@ class _MainPageState extends State<MainPage> {
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
                 child: Column(
                   children: [
-                    Container(
-                      width: 72,
-                      height: 72,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.5),
-                          width: 2.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
-                            blurRadius: 12,
-                          ),
-                        ],
-                      ),
-                      child: ClipOval(
-                        child: _profileImage != null
-                            ? (kIsWeb
-                                  ? Image.network(
-                                      _profileImage!.path,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.file(
-                                      File(_profileImage!.path),
-                                      fit: BoxFit.cover,
-                                    ))
-                            : Container(
-                                color: Colors.white.withOpacity(0.15),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.person_rounded,
-                                    size: 36,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                      ),
-                    ),
+                    // Container(
+                    //   width: 72,
+                    //   height: 72,
+                    //   decoration: BoxDecoration(
+                    //     shape: BoxShape.circle,
+                    //     border: Border.all(
+                    //       color: Colors.white.withOpacity(0.5),
+                    //       width: 2.5,
+                    //     ),
+                    //     boxShadow: [
+                    //       BoxShadow(
+                    //         color: Colors.black.withOpacity(0.15),
+                    //         blurRadius: 12,
+                    //       ),
+                    //     ],
+                    //   ),
+                    //   child: ClipOval(
+                    //     child: _profileImage != null
+                    //         ? (kIsWeb
+                    //               ? Image.network(
+                    //                   _profileImage!.path,
+                    //                   fit: BoxFit.cover,
+                    //                 )
+                    //               : Image.file(
+                    //                   File(_profileImage!.path),
+                    //                   fit: BoxFit.cover,
+                    //                 ))
+                    //         : Container(
+                    //             color: Colors.white.withOpacity(0.15),
+                    //             child: const Center(
+                    //               child: Icon(
+                    //                 Icons.person_rounded,
+                    //                 size: 36,
+                    //                 color: Colors.white,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //   ),
+                    // ),
                     const SizedBox(height: 12),
                     const Text(
                       "Mica User",
@@ -522,16 +547,16 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           const SizedBox(height: 12),
-          _drawerItem(
-            Icons.camera_alt_rounded,
-            widget.isArabic ? "تغيير الصورة" : "Change Photo",
-            const Color(0xFF1D4ED8),
-            isDark,
-            onTap: () {
-              Navigator.pop(context);
-              _pickNewImage();
-            },
-          ),
+          // _drawerItem(
+          //   Icons.camera_alt_rounded,
+          //   widget.isArabic ? "تغيير الصورة" : "Change Photo",
+          //   const Color(0xFF1D4ED8),
+          //   isDark,
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //     _pickNewImage();
+          //   },
+          // ),
           _drawerItem(
             Icons.language_rounded,
             widget.isArabic ? "English" : "العربية",

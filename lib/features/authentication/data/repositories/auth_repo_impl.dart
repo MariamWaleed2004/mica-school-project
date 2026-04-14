@@ -31,13 +31,16 @@ class AuthRepoImpl implements AuthRepo {
   => authRemoteDataSource.getCurrentUid();
 
   @override
-  Future<UserEntity> getSingleUser(String uid) 
-  => authRemoteDataSource.getSingleUser(uid);
+  Future<UserEntity> getSingleUser(String hardwareUid) 
+  => authRemoteDataSource.getSingleUser(hardwareUid);
   
   
   @override
   Stream<List<UserEntity>> getUsers(UserEntity user) 
   => authRemoteDataSource.getUsers(user);
+
+
+
   
 
 }

@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mica_school_app/features/attendance/presentation/cubit/attendance_log_cubit/attendance_log_cubit.dart';
+import 'package:mica_school_app/features/attendance/presentation/cubit/attendance_scan_cubit/attendance_scan_cubit.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/credential_cubit/credential_cubit.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/get_single_user_cubit/get_single_user_cubit.dart';
@@ -32,6 +34,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool isDarkMode = false;
   bool isArabic = true;
+  String? hardwareUid; // Add this line to store the hardware UID
   // Example major ID, replace with actual value as needed
 
   void toggleTheme() => setState(() => isDarkMode = !isDarkMode);
@@ -62,6 +65,8 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => di.sl<CredentialCubit>()),
         BlocProvider(create: (_) => di.sl<UserCubit>()),
         BlocProvider(create: (_) => di.sl<ScheduleCubit>()),
+        BlocProvider(create: (_) => di.sl<AttendanceScanCubit>()),
+        BlocProvider(create: (_) => di.sl<AttendanceLogsCubit>()),
         BlocProvider(
           create: (_) =>
               di.sl<GetSingleUserCubit>()

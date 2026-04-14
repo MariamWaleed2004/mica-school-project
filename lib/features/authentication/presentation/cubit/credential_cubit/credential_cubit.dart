@@ -12,14 +12,8 @@ import 'package:mica_school_app/features/authentication/presentation/cubit/crede
 
 class CredentialCubit extends Cubit<CredentialState> {
   final SignInUserUsecase signInUserUsecase;
-  // final SignUpUserUsecase signUpUserUsecase;
-  // final SignInWithGoogleUsecase signInWithGoogleUsecase;
-  // final SignUpWithGoogleUsecase signUpWithGoogleUsecase;
   CredentialCubit({
     required this.signInUserUsecase,
-    // required this.signUpUserUsecase,
-    // required this.signInWithGoogleUsecase,
-    // required this.signUpWithGoogleUsecase,
   }) : super(CredentialInitial());
 
 Future<void> signInUser({

@@ -2,6 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mica_school_app/features/attendance/data/datasources/attendance_remote_data_source.dart';
+import 'package:mica_school_app/features/attendance/data/datasources/attendance_remote_data_source_impl.dart';
+import 'package:mica_school_app/features/attendance/data/repositories/attendance_repo_impl.dart';
+import 'package:mica_school_app/features/attendance/domain/repositories/attendance_repo.dart';
+import 'package:mica_school_app/features/attendance/domain/usecases/get_recent_scans_usecase.dart';
+import 'package:mica_school_app/features/attendance/domain/usecases/get_user_logs_usecase.dart';
+import 'package:mica_school_app/features/attendance/presentation/cubit/attendance_log_cubit/attendance_log_cubit.dart';
+import 'package:mica_school_app/features/attendance/presentation/cubit/attendance_scan_cubit/attendance_scan_cubit.dart';
 import 'package:mica_school_app/features/authentication/data/datasources/remote_data_sources/auth_remote_data_source.dart';
 import 'package:mica_school_app/features/authentication/data/datasources/remote_data_sources/auth_remote_data_source_impl.dart';
 import 'package:mica_school_app/features/authentication/data/repositories/auth_repo_impl.dart';
@@ -52,6 +60,15 @@ Future<void> init() async {
         getSingleUserUsecase: sl.call(),
       ));
 
+  sl.registerFactory(() => AttendanceScanCubit(
+        getRecentScansUsecase: sl.call(),
+      ));
+
+      sl.registerFactory(() => AttendanceLogsCubit(
+        getStudentLogsUseCase: sl.call(),
+      ));
+
+
 
 
 
@@ -65,14 +82,19 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetSingleUserUsecase(repository: sl.call()));
   sl.registerLazySingleton(() => GetSubjectUsecase(repository: sl.call()));
   sl.registerLazySingleton(() => GetExamUsecase(repository: sl.call()));
+  sl.registerLazySingleton(() => GetRecentScansUsecase(repository: sl.call()));
+  sl.registerLazySingleton(() => GetStudentLogsUseCase(repository: sl.call()));
 
 
   // Repository
   sl.registerLazySingleton<AuthRepo>(
       () => AuthRepoImpl(authRemoteDataSource: sl.call()));
 
-       sl.registerLazySingleton<HomeRepo>(
+  sl.registerLazySingleton<HomeRepo>(
       () => HomeRepoImpl(homeRemoteDataSource: sl.call()));
+
+  sl.registerLazySingleton<AttendanceRepo>(
+      () => AttendanceRepoImpl(attendanceRemoteDataSource: sl.call()));
 
 
   //Remote Data Source
@@ -85,12 +107,15 @@ Future<void> init() async {
        sl.registerLazySingleton<HomeRemoteDataSource>(() => HomeRemoteDataSourceImpl(
       firebaseFirestore: sl.call(),));
 
+       sl.registerLazySingleton<AttendanceRemoteDataSource>(() => AttendanceRemoteDataSourceImpl());
+
 
 
   // Externals
   final firebaseFirestore = FirebaseFirestore.instance;
   final firebaseAuth = FirebaseAuth.instance;
   final firebaseStorage = FirebaseStorage.instance;
+
 
   sl.registerLazySingleton(() => firebaseFirestore);
   sl.registerLazySingleton(() => firebaseAuth);

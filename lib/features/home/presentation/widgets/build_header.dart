@@ -127,26 +127,26 @@ class BuildHeaderWidget extends StatelessWidget {
                   //       ),
                   //     ),
                   
-                      Container(
-                        width: 56,
-                        height: 56,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.5),
-                            width: 2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
-                              blurRadius: 12,
-                            ),
-                          ],
-                        ),
-                        child: ClipOval(
-                          child: buildProfileImage(),
-                        ),
-                      ),
+                      // Container(
+                      //   width: 56,
+                      //   height: 56,
+                      //   decoration: BoxDecoration(
+                      //     shape: BoxShape.circle,
+                      //     border: Border.all(
+                      //       color: Colors.white.withOpacity(0.5),
+                      //       width: 2,
+                      //     ),
+                      //     boxShadow: [
+                      //       BoxShadow(
+                      //         color: Colors.black.withOpacity(0.15),
+                      //         blurRadius: 12,
+                      //       ),
+                      //     ],
+                      //   ),
+                      //   child: ClipOval(
+                      //     child: buildProfileImage(),
+                      //   ),
+                      // ),
 // ----------------------------------------- User's Active Status --------------------------------------------
                       Container(
                         padding: const EdgeInsets.symmetric(
