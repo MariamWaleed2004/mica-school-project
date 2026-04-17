@@ -68,14 +68,19 @@ Future<UserEntity> signInUser(UserEntity user, BuildContext context) async {
     await firebaseAuth.signOut();
   }
 
+
+
+
+
+
 @override
-Future<UserEntity> getSingleUser(String hardwareUid) async {
+Future<UserEntity> getSingleUser(String uid) async {
   final doc = await FirebaseFirestore.instance
       .collection('users')
-      .doc(hardwareUid)
+      .doc(uid)
       .get();
       
-  print("DOC ID: $hardwareUid");
+  print("DOC ID: $uid");
   print("EXISTS: ${doc.exists}");
   print("DATA: ${doc.data()}");
 
@@ -87,6 +92,12 @@ Future<UserEntity> getSingleUser(String hardwareUid) async {
 
   return model; // because UserModel extends UserEntity
 }
+
+
+
+
+
+
 
 
   @override

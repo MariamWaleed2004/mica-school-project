@@ -13,7 +13,7 @@ abstract class AuthRepo {
 
   Stream<List<UserEntity>> getUsers(UserEntity user);
 
-  Future<UserEntity> getSingleUser(String hardwareUid);
+  Future<UserEntity> getSingleUser(String uid);
 
 
 

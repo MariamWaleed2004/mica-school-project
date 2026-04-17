@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -41,7 +40,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  //final String hardwareUid;
+  String? hardwareUid;
 
   int _selectedIndex = 0;
   XFile? _profileImage;
@@ -62,8 +61,7 @@ class _MainPageState extends State<MainPage> {
     await prefs.setString('saved_profile_image', path);
   }
 
-
-  Future<void> _loadHardwareUid() async {
+Future<void> _loadHardwareUid() async {
   final firebaseUid = FirebaseAuth.instance.currentUser!.uid;
 
   final doc = await FirebaseFirestore.instance
@@ -71,12 +69,17 @@ class _MainPageState extends State<MainPage> {
       .doc(firebaseUid)
       .get();
 
+        print("DOC EXISTS: ${doc.exists}");
+  print("DOC DATA: ${doc.data()}");
+
   if (doc.exists) {
     setState(() {
-      //widget.hardwareUid = doc['id']; // ده الـ hardware uid
+      hardwareUid = doc['id'];
     });
   }
 }
+
+
  @override
   void initState() {
     super.initState();
@@ -189,21 +192,23 @@ class _MainPageState extends State<MainPage> {
   // }
 
   List<Widget> _getPages() {
-   // if (hardwareUid == null) { return const Center(child: CircularProgressIndicator()); }
+  
     return [
       HomeScreen(
         isArabic: widget.isArabic,
         profileImage: widget.profileImageUrl,
         onNavigate: _handleNavigation,
       ),
-      profile.ProfilePage(
-        // isArabic: widget.isArabic,
-        // texts: const {},
-        // profileImage: _profileImage,
+      profile.ProfileScreen(
+        isArabic: widget.isArabic,
+        texts: const {},
+        profileImage: _profileImage,
       ),
       CanteenPage(isArabic: widget.isArabic, isDarkMode: widget.isDarkMode),
       attendance.AttendanceScreen(
-        //userId: widget.hardwareUid,
+        userId: 
+        //FirebaseAuth.instance.currentUser!.uid,
+        hardwareUid!,
         isArabic: widget.isArabic,
         isDarkMode: widget.isDarkMode,
         texts: const {},
@@ -245,6 +250,12 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+
+     if (hardwareUid == null) {
+    return const Scaffold(
+      body: Center(child: CircularProgressIndicator()),
+    );
+  } 
     final isDark = widget.isDarkMode;
 
     final navLabels = widget.isArabic

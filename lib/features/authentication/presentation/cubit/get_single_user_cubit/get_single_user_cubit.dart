@@ -14,6 +14,10 @@ class GetSingleUserCubit extends Cubit<GetSingleUserState> {
     required this.getSingleUserUsecase,
   }) : super(GetSingleUserInitial());
 
+
+
+  
+
   Future<void> getSingleUser({required String uid}) async {
     emit(GetSingleUserLoading());
 

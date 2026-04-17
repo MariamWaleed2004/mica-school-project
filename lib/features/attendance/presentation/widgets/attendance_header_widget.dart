@@ -7,6 +7,10 @@ class AttendanceHeaderWidget extends StatelessWidget {
   final int attendedDays;
   final int absentDays;
   final double attendanceRate;
+  final int selectedMonthIndex;
+  final List<String> monthsAr;
+  final List<String> monthsEn;
+  final Function(int) onMonthChanged;
 
   const AttendanceHeaderWidget({
     super.key,
@@ -15,6 +19,10 @@ class AttendanceHeaderWidget extends StatelessWidget {
     required this.attendedDays,
     required this.absentDays,
     required this.attendanceRate,
+    required this.selectedMonthIndex,
+    required this.monthsAr,
+    required this.monthsEn,
+    required this.onMonthChanged,
   });
 
   @override
@@ -41,6 +49,7 @@ class AttendanceHeaderWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // 🔥 أيقونة التقويم بس (من غير مربع ومن غير اسم شهر)
                   _buildMonthPicker(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -117,8 +126,46 @@ class AttendanceHeaderWidget extends StatelessWidget {
   }
 
   Widget _buildMonthPicker() {
-    return const Icon(Icons.calendar_month, color: Colors.white);
+    return Container(
+      // 🔥 مفيش خلفية ولا حدود ولا padding
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<int>(
+          value: selectedMonthIndex,
+          icon: const Icon(
+            Icons.calendar_month,
+            color: Colors.white,
+            size: 28,
+          ),
+          // 🔥 خلي الـ icon بس من غير نص
+          dropdownColor: const Color(0xFF1D4ED8),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+          ),
+          items: List.generate(
+            monthsAr.length,
+            (i) => DropdownMenuItem(
+              value: i,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Text(
+                  isArabic ? monthsAr[i] : monthsEn[i],
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          onChanged: (value) {
+            if (value != null) {
+              onMonthChanged(value);
+            }
+          },
+        ),
+      ),
+    );
   }
-
-
 }

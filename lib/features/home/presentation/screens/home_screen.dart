@@ -235,6 +235,7 @@ class _HomeScreenState extends State<HomeScreen>
       },
     );
   }
+  
 
   Widget _buildTeacherRatings(bool isDark, Color cardColor, Color textColor) {
     return Column(
