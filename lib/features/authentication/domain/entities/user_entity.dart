@@ -16,6 +16,8 @@ class UserEntity extends Equatable {
   final String? majorEn;
   final String? majorAr;
   final String? majorId;
+  final String? department;
+  final String? lab;
 
 
   UserEntity({
@@ -32,6 +34,8 @@ class UserEntity extends Equatable {
     this.majorEn,
     this.majorAr,
     this.majorId,
+    this.department,
+    this.lab,
   });
 
   @override
@@ -48,6 +52,8 @@ class UserEntity extends Equatable {
         gradeNum,
         majorEn,
         majorAr,
-        majorId
+        majorId,
+        department,
+        lab,
       ];
 }

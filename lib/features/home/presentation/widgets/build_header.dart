@@ -8,11 +8,10 @@ import 'package:image_picker/image_picker.dart';
 class BuildHeaderWidget extends StatelessWidget {
   final bool isDark;
   final bool isArabic;
-  final String? profileImageUrl;
+  final String? profileImageUrl;  // 🔥 المصدر الوحيد للصورة
   final bool isActive;
   final String nameAr;
   final String nameEn;
-  final XFile? profileImage;
 
   const BuildHeaderWidget({
     super.key,
@@ -22,8 +21,13 @@ class BuildHeaderWidget extends StatelessWidget {
     this.isActive = true,
     required this.nameAr,
     required this.nameEn,
-    this.profileImage,
   });
+
+  String _getFirstName(String fullName) {
+    if (fullName.isEmpty) return '';
+    final parts = fullName.split(' ');
+    return parts.first;
+  }
 
   Widget _defaultAvatar() {
     return Container(
@@ -31,23 +35,26 @@ class BuildHeaderWidget extends StatelessWidget {
       child: const Center(child: Text("👤", style: TextStyle(fontSize: 28))),
     );
   }
-  Widget buildProfileImage() {
-  if (profileImageUrl == null || profileImageUrl!.isEmpty) {
-    return _defaultAvatar();
-  }
 
-  return Image.network(
-    profileImageUrl!,
-    fit: BoxFit.cover,
-    errorBuilder: (context, error, stackTrace) {
+  Widget _buildProfileImage() {
+    if (profileImageUrl == null || profileImageUrl!.isEmpty) {
       return _defaultAvatar();
-    },
-  );
-}
+    }
+
+    return Image.network(
+      profileImageUrl!,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return _defaultAvatar();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final firstNameAr = _getFirstName(nameAr);
+    final firstNameEn = _getFirstName(nameEn);
+
     return Container(
       width: double.infinity,
       height: 220,
@@ -97,57 +104,27 @@ class BuildHeaderWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-// ----------------------------------------- User's Profile Image ----------------------------------------------
-                  //  Container(
-                  //       width: 56,
-                  //       height: 56,
-                  //       decoration: BoxDecoration(
-                  //         shape: BoxShape.circle,
-                  //         border: Border.all(
-                  //             color: Colors.white.withOpacity(0.5), width: 2),
-                  //         boxShadow: [
-                  //           BoxShadow(
-                  //               color: Colors.black.withOpacity(0.15),
-                  //               blurRadius: 12)
-                  //         ],
-                  //       ),
-                  //       child: ClipOval(
-                  //         child: profileImage != null
-                  //             ? (kIsWeb
-                  //                 ? Image.network(profileImage!.path,
-                  //                     fit: BoxFit.cover)
-                  //                 : Image.file(File(profileImage!.path),
-                  //                     fit: BoxFit.cover))
-                  //             : Container(
-                  //                 color: Colors.white.withOpacity(0.15),
-                  //                 child: const Center(
-                  //                     child: Text("👤",
-                  //                         style: TextStyle(fontSize: 28))),
-                  //               ),
-                  //       ),
-                  //     ),
-                  
-                      // Container(
-                      //   width: 56,
-                      //   height: 56,
-                      //   decoration: BoxDecoration(
-                      //     shape: BoxShape.circle,
-                      //     border: Border.all(
-                      //       color: Colors.white.withOpacity(0.5),
-                      //       width: 2,
-                      //     ),
-                      //     boxShadow: [
-                      //       BoxShadow(
-                      //         color: Colors.black.withOpacity(0.15),
-                      //         blurRadius: 12,
-                      //       ),
-                      //     ],
-                      //   ),
-                      //   child: ClipOval(
-                      //     child: buildProfileImage(),
-                      //   ),
-                      // ),
-// ----------------------------------------- User's Active Status --------------------------------------------
+                      // 🔥 الصورة من Firebase
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.5),
+                            width: 2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              blurRadius: 12,
+                            ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: _buildProfileImage(),
+                        ),
+                      ),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 14,
@@ -185,7 +162,6 @@ class BuildHeaderWidget extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-// ----------------------------------------- User's Name ----------------------------------------------
                   Text(
                     isArabic ? "صباح الخير ✨" : "Good Morning ✨",
                     style: TextStyle(
@@ -195,7 +171,7 @@ class BuildHeaderWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    isArabic ? "مرحباً، $nameAr" : "Welcome, $nameEn",
+                    isArabic ? "مرحباً، $firstNameAr" : "Welcome, $firstNameEn",
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 26,

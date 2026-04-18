@@ -10,6 +10,7 @@ import 'package:mica_school_app/features/authentication/presentation/cubit/get_s
 import 'package:mica_school_app/features/authentication/presentation/cubit/user_cubit/user_cubit.dart';
 import 'package:mica_school_app/features/authentication/presentation/screens/login_screen.dart';
 import 'package:mica_school_app/features/home/presentation/cubit/schedule_cubit/schedule_cubit.dart';
+import 'package:mica_school_app/features/homework/presentation/cubit/homework_cubit.dart';
 import 'package:mica_school_app/main_page.dart';
 
 import 'package:mica_school_app/core/injection_container.dart' as di;
@@ -67,6 +68,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => di.sl<ScheduleCubit>()),
         BlocProvider(create: (_) => di.sl<AttendanceScanCubit>()),
         BlocProvider(create: (_) => di.sl<AttendanceLogsCubit>()),
+        BlocProvider(create: (_) => di.sl<HomeworkCubit>()),
         BlocProvider(
           create: (_) =>
               di.sl<GetSingleUserCubit>()

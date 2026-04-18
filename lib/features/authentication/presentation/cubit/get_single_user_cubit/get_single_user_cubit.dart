@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -26,9 +27,11 @@ class GetSingleUserCubit extends Cubit<GetSingleUserState> {
 
       emit(GetSingleUserLoaded(user: user));
     } on SocketException {
-      emit(GetSingleUserFailure());
+      emit(GetSingleUserFailure(
+        errorMessage: e.toString()
+      ));
     } catch (_) {
-      emit(GetSingleUserFailure());
+      emit(GetSingleUserFailure(errorMessage: e.toString()));
     }
   }
 }

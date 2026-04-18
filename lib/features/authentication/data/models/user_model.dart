@@ -3,6 +3,7 @@ import 'package:mica_school_app/features/authentication/domain/entities/user_ent
 
 class UserModel extends UserEntity {
   final String? uid;
+  final String? id;
   final String? nameAr;
   final String? nameEn;
   final String? profileImageUrl;
@@ -12,11 +13,13 @@ class UserModel extends UserEntity {
   final String? majorEn;
   final String? majorAr;
   final String? majorId;
-  final String? id;
+  final String? department;
+  final String? lab;
 
 
   UserModel({
       this.uid,
+      this.id,
       this.nameAr,
       this.nameEn,
       this.profileImageUrl,
@@ -26,9 +29,12 @@ class UserModel extends UserEntity {
       this.majorEn,
       this.majorAr,
       this.majorId,
-      this.id,
+      this.department,
+      this.lab,
+
       }) : super (
         uid: uid,
+        id: id,
         nameAr: nameAr,
         nameEn: nameEn,
         profileImageUrl: profileImageUrl,
@@ -38,7 +44,8 @@ class UserModel extends UserEntity {
         majorEn: majorEn,
         majorAr: majorAr,
         majorId: majorId,
-        id: id,
+        department: department,
+        lab: lab,
       );
 
     factory UserModel.fromSnapshot(DocumentSnapshot snap) {
@@ -46,6 +53,7 @@ class UserModel extends UserEntity {
 
       return UserModel(
         uid: snapshot['uid'],
+        id: snapshot['id'],
         nameAr: snapshot['nameAr'],
         nameEn: snapshot['nameEn'],
         profileImageUrl: snapshot['profileImageUrl'],
@@ -55,7 +63,8 @@ class UserModel extends UserEntity {
         majorEn: snapshot['majorEn'],
         majorAr: snapshot['majorAr'],
         majorId: snapshot['majorId'],
-        id: snapshot['id'],
+        department: snapshot['department'],
+        lab: snapshot['lab'],
       );
     }
 
@@ -63,6 +72,7 @@ class UserModel extends UserEntity {
 
   Map<String, dynamic> toJson() => {
     'uid': uid,
+    'id': id,
     'nameAr': nameAr,
     'nameEn': nameEn,
     'profileImageUrl': profileImageUrl,
@@ -72,8 +82,7 @@ class UserModel extends UserEntity {
     'majorEn': majorEn,
     'majorAr': majorAr,
     'majorId': majorId,
-    'id': id,
+    'department': department,
+    'lab': lab,
   };
-
-
 }

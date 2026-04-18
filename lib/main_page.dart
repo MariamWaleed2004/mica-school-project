@@ -8,10 +8,10 @@ import 'package:mica_school_app/features/attendance/presentation/screens/attenda
 import 'package:mica_school_app/Canteen.dart';
 import 'package:mica_school_app/Fees.dart';
 import 'package:mica_school_app/features/home/presentation/screens/home_screen.dart';
-import 'package:mica_school_app/Homework.dart';
+import 'package:mica_school_app/features/homework/presentation/screens/Homework.dart';
 import 'package:mica_school_app/Logs.dart';
 import 'package:mica_school_app/Notifications.dart';
-import 'package:mica_school_app/Profile.dart' as profile;
+import 'package:mica_school_app/features/template/presentation/screens/Profile.dart' as profile;
 import 'package:mica_school_app/features/home/presentation/screens/schedule_screen.dart';
 import 'package:mica_school_app/features/authentication/presentation/screens/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -202,7 +202,7 @@ Future<void> _loadHardwareUid() async {
       profile.ProfileScreen(
         isArabic: widget.isArabic,
         texts: const {},
-        profileImage: _profileImage,
+       // profileImage: _profileImage,
       ),
       CanteenPage(isArabic: widget.isArabic, isDarkMode: widget.isDarkMode),
       attendance.AttendanceScreen(
@@ -234,7 +234,7 @@ Future<void> _loadHardwareUid() async {
         _pushPage(FeesPage(isArabic: widget.isArabic));
         break;
       case 'homework':
-        _pushPage(HomeworkPage(isArabic: widget.isArabic));
+        _pushPage(HomeworkScreen(isArabic: widget.isArabic, userId: FirebaseAuth.instance.currentUser!.uid,));
         break;
       case 'attendance':
         setState(() => _selectedIndex = 3);

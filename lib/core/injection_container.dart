@@ -30,6 +30,13 @@ import 'package:mica_school_app/features/home/domain/repositories/home_repo.dart
 import 'package:mica_school_app/features/home/domain/usecases/get_exam_usecase.dart';
 import 'package:mica_school_app/features/home/domain/usecases/get_property_usecase.dart';
 import 'package:mica_school_app/features/home/presentation/cubit/schedule_cubit/schedule_cubit.dart';
+import 'package:mica_school_app/features/homework/data/datasources/homework_remote_data_source.dart';
+import 'package:mica_school_app/features/homework/data/datasources/homework_remote_data_source_impl.dart';
+import 'package:mica_school_app/features/homework/data/repositories/homework_repo_impl.dart';
+import 'package:mica_school_app/features/homework/domain/repositories/home_work_repo.dart';
+import 'package:mica_school_app/features/homework/domain/usecases/get_homework_usecase.dart';
+import 'package:mica_school_app/features/homework/domain/usecases/toggle_homework_status_usecase.dart';
+import 'package:mica_school_app/features/homework/presentation/cubit/homework_cubit.dart';
 
 
 final sl = GetIt.instance;
@@ -64,10 +71,14 @@ Future<void> init() async {
         getRecentScansUsecase: sl.call(),
       ));
 
-      sl.registerFactory(() => AttendanceLogsCubit(
-        getStudentLogsUseCase: sl.call(),
+  sl.registerFactory(() => AttendanceLogsCubit(
+      getStudentLogsUseCase: sl.call(),
       ));
 
+  sl.registerFactory(() => HomeworkCubit(
+        getHomeworkUsecase: sl.call(),
+        toggleHomeworkStatusUsecase: sl.call(),
+      ));
 
 
 
@@ -84,6 +95,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetExamUsecase(repository: sl.call()));
   sl.registerLazySingleton(() => GetRecentScansUsecase(repository: sl.call()));
   sl.registerLazySingleton(() => GetStudentLogsUseCase(repository: sl.call()));
+  sl.registerLazySingleton(() => GetHomeworkUsecase(repository: sl.call()));
+  sl.registerLazySingleton(() => ToggleHomeworkStatusUsecase(sl.call()));
 
 
   // Repository
@@ -95,6 +108,11 @@ Future<void> init() async {
 
   sl.registerLazySingleton<AttendanceRepo>(
       () => AttendanceRepoImpl(attendanceRemoteDataSource: sl.call()));
+
+      sl.registerLazySingleton<HomeworkRepo>(
+      () => HomeworkRepoImpl(homeworkremoteDataSource: sl.call()));
+  
+  
 
 
   //Remote Data Source
@@ -108,6 +126,10 @@ Future<void> init() async {
       firebaseFirestore: sl.call(),));
 
        sl.registerLazySingleton<AttendanceRemoteDataSource>(() => AttendanceRemoteDataSourceImpl());
+
+
+       sl.registerLazySingleton<HomeworkRemoteDataSource>(() => HomeworkRemoteDataSourceImpl(
+      firebaseFirestore: sl.call(),));
 
 
 

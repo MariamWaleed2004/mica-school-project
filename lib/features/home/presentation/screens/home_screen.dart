@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     context.read<GetSingleUserCubit>().getSingleUser(
-    uid: FirebaseAuth.instance.currentUser!.email!.split('@')[0],
+      uid: FirebaseAuth.instance.currentUser!.uid, 
   );
 
     _controller = AnimationController(
@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen>
                     BuildHeaderWidget(
                       isDark: false,
                       isArabic: widget.isArabic,
-                      profileImageUrl: null,
+                      profileImageUrl: widget.profileImage ?? user.profileImageUrl,
                       nameAr: user.nameAr ?? "UserAr",
                       nameEn: user.nameEn ?? "UserEN",
                       isActive: user.isActive ?? false,
