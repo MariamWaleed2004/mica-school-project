@@ -31,7 +31,20 @@ class _LoginScreenState extends State<LoginScreen>
   late AnimationController _formController;
   late Animation<double> _formFade;
   late Animation<Offset> _formSlide;
+
+
+
+
+
+
   bool _isSigningIn = false;
+
+
+
+
+
+
+
 
   bool isDarkMode = false;
   bool isArabic = true;
@@ -219,55 +232,125 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   // -------------------------------------------------- Build Method ------------------------------------------------------------------------
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
-      body: BlocConsumer<CredentialCubit, CredentialState>(
-        listener: (context, credentialState) {
-          if (credentialState is CredentialLoading) {
-            setState(() {
-              _isSigningIn = true;
-            });
-          }
 
-          if (credentialState is CredentialSuccess) {
-            BlocProvider.of<AuthCubit>(context).loggedIn();
-            setState(() {
-              _isSigningIn = false;
-            });
-          }
-          if (credentialState is CredentialFailure) {
-            setState(() {
-              _isSigningIn = false;
-            });
-          }
-        },
-        builder: (context, credentailState) {
-          if (credentailState is CredentialSuccess) {
-            return BlocBuilder<AuthCubit, AuthState>(
-              builder: (context, authState) {
-                if (authState is Authenticated) {
-                  return MainPage(
-                    isDarkMode: isDarkMode,
-                    isArabic: isArabic,
-                    onThemeToggle: toggleTheme,
-                    onLanguageToggle: toggleLanguage,
-                  );
-                  ;
-                } else {
-                  return _bodyWidget();
-                }
-              },
-            );
-          }
-          return _bodyWidget();
-        },
-      ),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     final isDark = Theme.of(context).brightness == Brightness.dark;
 
+//     return Scaffold(
+//       body: BlocConsumer<CredentialCubit, CredentialState>(
+//         listener: (context, credentialState) {
+
+// // BlocConsumer (
+// //hfgjfjfjfgnjgnjgnbjgggfjbg hghhguhgu jhgj
+// //)
+
+
+
+//           if (credentialState is CredentialLoading) {
+//             setState(() {
+//               _isSigningIn = true;
+//             });
+//           }
+
+
+//           if (credentialState is CredentialSuccess) {
+//             BlocProvider.of<AuthCubit>(context).loggedIn();
+//             setState(() {
+//               _isSigningIn = false;
+//             });
+//           }
+
+
+
+//           if (credentialState is CredentialFailure) {
+//             setState(() {
+//               _isSigningIn = false;
+//             });
+//           }
+//         },
+
+
+
+
+
+//         builder: (context, credentailState) {
+
+
+
+
+//           if (credentailState is CredentialSuccess) {
+
+//             return BlocBuilder<AuthCubit, AuthState>(
+//               builder: (context, authState) {
+//                 if (authState is Authenticated) {
+//                   return MainPage(
+//                     isDarkMode: isDarkMode,
+//                     isArabic: isArabic,
+//                     onThemeToggle: toggleTheme,
+//                     onLanguageToggle: toggleLanguage,
+//                   );
+                  
+//                 } else {
+//                   return _bodyWidget();
+//                 }
+//               },
+//             );
+//           }
+//           return _bodyWidget();
+//         },
+//       ),
+//     );
+//   }
+
+
+// LoginScreen.dart
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: BlocConsumer<CredentialCubit, CredentialState>(
+      listener: (context, credentialState) {
+        if (credentialState is CredentialLoading) {
+          setState(() => _isSigningIn = true);
+        }
+
+        if (credentialState is CredentialSuccess) {
+          setState(() => _isSigningIn = false);
+          // 🔥 تأكدي أن AuthCubit يتحدث بعد نجاح تسجيل الدخول
+          context.read<AuthCubit>().loggedIn();
+        }
+
+        if (credentialState is CredentialFailure) {
+          setState(() => _isSigningIn = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(credentialState.errorMessage),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      builder: (context, credentialState) {
+        return BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, authState) {
+            // 🔥 إذا كان المستخدم مصادق عليه، اذهب للـ MainPage
+            if (authState is Authenticated) {
+              return MainPage(
+                isDarkMode: isDarkMode,
+                isArabic: isArabic,
+                onThemeToggle: toggleTheme,
+                onLanguageToggle: toggleLanguage,
+              );
+            }
+            return _bodyWidget();
+          },
+        );
+      },
+    ),
+  );
+}
   _bodyWidget() {
     double width = AppSizes.screenWidth(context);
     double height = AppSizes.screenHeight(context);
@@ -429,13 +512,19 @@ class _LoginScreenState extends State<LoginScreen>
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: ElevatedButton(
-                              onPressed: _isSigningIn
+
+
+
+                       //========================================================       
+                              onPressed:
+                               _isSigningIn
                                   ? null
                                   : () {
                                       if (_formKey.currentState!.validate()) {
                                         _signInUser();
                                       }
                                     },
+                       //========================================================       
 
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors
@@ -446,6 +535,8 @@ class _LoginScreenState extends State<LoginScreen>
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                               ),
+
+                             // issinging in true        ?     fhvfhvfhvf : fbvvjfvjfvbjf 
                               child: _isSigningIn == false
                                   ? Text(
                                       'Sign In',
@@ -481,42 +572,7 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ),
 
-                          // GestureDetector(
-                          //   child: Container(
-                          //     height: 56,
-                          //     decoration: BoxDecoration(
-                          //       gradient: const LinearGradient(
-                          //         colors: [
-                          //           Color(0xFF4F46E5),
-                          //           Color(0xFF06B6D4),
-                          //         ],
-                          //         begin: Alignment.centerLeft,
-                          //         end: Alignment.centerRight,
-                          //       ),
-                          //       borderRadius: BorderRadius.circular(16),
-                          //       boxShadow: [
-                          //         BoxShadow(
-                          //           color: const Color(
-                          //             0xFF4F46E5,
-                          //           ).withOpacity(0.4),
-                          //           blurRadius: 20,
-                          //           offset: const Offset(0, 8),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //     child: const Center(
-                          //       child: Text(
-                          //         "Login",
-                          //         style: TextStyle(
-                          //           color: Colors.white,
-                          //           fontSize: 16,
-                          //           fontWeight: FontWeight.w700,
-                          //           letterSpacing: 0.5,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
+                         
                           const SizedBox(height: 16),
                           // =========================== Forgot Password Link =============================
                           TextButton(
@@ -569,3 +625,8 @@ class _LoginScreenState extends State<LoginScreen>
     });
   }
 }
+
+
+
+
+

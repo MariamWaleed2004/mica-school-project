@@ -30,24 +30,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<bool> isSignIn() async => firebaseAuth.currentUser?.uid != null;
 
+
 @override
 Future<UserEntity> signInUser(UserEntity user, BuildContext context) async {
   try {
     final email = "${user.id}@mica.com";
 
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+    final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: user.password!,
     );
 
-
+    final authUid = userCredential.user!.uid;
+    
     final doc = await FirebaseFirestore.instance
         .collection('users')
-        .doc(user.id)
+        .doc(authUid) 
         .get();
 
     if (!doc.exists) {
-      throw Exception("User data not found");
+      throw Exception("User data not found for UID: $authUid");
     }
 
     return UserModel.fromSnapshot(doc);
@@ -58,17 +60,18 @@ Future<UserEntity> signInUser(UserEntity user, BuildContext context) async {
     } else {
       toast(e.message ?? 'Something went wrong');
     }
-
     throw Exception("Login failed");
   }
 }
+
+
+
+
 
   @override
   Future<void> signOut() async {
     await firebaseAuth.signOut();
   }
-
-
 
 
 
@@ -85,20 +88,11 @@ Future<UserEntity> getSingleUser(String uid) async {
   print("DATA: ${doc.data()}");
 
   if (!doc.exists) {
-    throw Exception("User not found");
+    throw Exception("User not found for UID: $uid");
   }
 
-  final model = UserModel.fromSnapshot(doc);
-
-  return model; // because UserModel extends UserEntity
+  return UserModel.fromSnapshot(doc);
 }
-
-
-
-
-
-
-
 
   @override
   Stream<List<UserEntity>> getUsers(UserEntity user) {

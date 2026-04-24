@@ -23,13 +23,25 @@ import 'package:mica_school_app/features/authentication/presentation/cubit/auth_
 import 'package:mica_school_app/features/authentication/presentation/cubit/credential_cubit/credential_cubit.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/get_single_user_cubit/get_single_user_cubit.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/user_cubit/user_cubit.dart';
+import 'package:mica_school_app/features/canteen/data/datasources/canteen_remote_data_source.dart';
+import 'package:mica_school_app/features/canteen/data/datasources/canteen_remote_data_source_impl.dart';
+import 'package:mica_school_app/features/canteen/data/repositories/canteen_repo_impl.dart';
+import 'package:mica_school_app/features/canteen/domain/repositories/canteen_repo.dart';
+import 'package:mica_school_app/features/canteen/domain/usecases/get_available_month_usecase.dart';
+import 'package:mica_school_app/features/canteen/domain/usecases/get_month_data_usecase.dart';
+import 'package:mica_school_app/features/canteen/presentation/cubit/canteen_cubit.dart';
 import 'package:mica_school_app/features/home/data/datasources/auth_remote_data_source.dart';
 import 'package:mica_school_app/features/home/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:mica_school_app/features/home/data/repositories/home_repo_impl.dart';
 import 'package:mica_school_app/features/home/domain/repositories/home_repo.dart';
-import 'package:mica_school_app/features/home/domain/usecases/get_exam_usecase.dart';
-import 'package:mica_school_app/features/home/domain/usecases/get_property_usecase.dart';
+import 'package:mica_school_app/features/home/domain/usecases/fees_usecases/get_fees_item_usecase.dart';
+import 'package:mica_school_app/features/home/domain/usecases/fees_usecases/get_fees_summary_usecase.dart';
+import 'package:mica_school_app/features/home/domain/usecases/get_teacher_rating_usecase.dart';
+import 'package:mica_school_app/features/home/domain/usecases/schedule_usecases/get_exam_usecase.dart';
+import 'package:mica_school_app/features/home/domain/usecases/schedule_usecases/get_subject_usecase.dart';
+import 'package:mica_school_app/features/home/presentation/cubit/fees_cubit/fees_cubit.dart';
 import 'package:mica_school_app/features/home/presentation/cubit/schedule_cubit/schedule_cubit.dart';
+import 'package:mica_school_app/features/home/presentation/cubit/teacher_rating_cubit/teacher_rating_cubit.dart';
 import 'package:mica_school_app/features/homework/data/datasources/homework_remote_data_source.dart';
 import 'package:mica_school_app/features/homework/data/datasources/homework_remote_data_source_impl.dart';
 import 'package:mica_school_app/features/homework/data/repositories/homework_repo_impl.dart';
@@ -81,6 +93,22 @@ Future<void> init() async {
       ));
 
 
+  sl.registerFactory(() => FeesCubit(
+        getFeesSummaryUsecase: sl.call(),
+        getAllFeesItemsUsecase: sl.call(), 
+      ));
+
+
+  sl.registerFactory(() => TeacherRatingCubit(
+        getTeacherRatingsUsecase: sl.call(),
+      ));
+
+      sl.registerFactory(() => CanteenCubit(
+        getAvailableMonthsUsecase: sl.call(),
+        getMonthDataUsecase:sl.call(),
+      ));
+
+
 
 
 
@@ -97,6 +125,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetStudentLogsUseCase(repository: sl.call()));
   sl.registerLazySingleton(() => GetHomeworkUsecase(repository: sl.call()));
   sl.registerLazySingleton(() => ToggleHomeworkStatusUsecase(sl.call()));
+  sl.registerLazySingleton(() => GetFeesSummaryUsecase(sl.call()));
+  sl.registerLazySingleton(() => GetAllFeesItemsUsecase(sl.call()));
+  sl.registerLazySingleton(() => GetTeacherRatingsUsecase(sl.call()));
+  sl.registerLazySingleton(() => GetAvailableMonthsUsecase(sl.call()));
+  sl.registerLazySingleton(() => GetMonthDataUsecase(sl.call()));
+
 
 
   // Repository
@@ -109,8 +143,11 @@ Future<void> init() async {
   sl.registerLazySingleton<AttendanceRepo>(
       () => AttendanceRepoImpl(attendanceRemoteDataSource: sl.call()));
 
-      sl.registerLazySingleton<HomeworkRepo>(
+  sl.registerLazySingleton<HomeworkRepo>(
       () => HomeworkRepoImpl(homeworkremoteDataSource: sl.call()));
+
+  sl.registerLazySingleton<CanteenRepo>(
+      () => CanteenRepoImpl(canteenRemoteDataSource: sl.call()));
   
   
 
@@ -122,14 +159,14 @@ Future<void> init() async {
       firebaseStorage: sl.call()));
 
 
-       sl.registerLazySingleton<HomeRemoteDataSource>(() => HomeRemoteDataSourceImpl(
+  sl.registerLazySingleton<HomeRemoteDataSource>(() => HomeRemoteDataSourceImpl(
       firebaseFirestore: sl.call(),));
 
-       sl.registerLazySingleton<AttendanceRemoteDataSource>(() => AttendanceRemoteDataSourceImpl());
+  sl.registerLazySingleton<AttendanceRemoteDataSource>(() => AttendanceRemoteDataSourceImpl());
 
 
-       sl.registerLazySingleton<HomeworkRemoteDataSource>(() => HomeworkRemoteDataSourceImpl(
-      firebaseFirestore: sl.call(),));
+  sl.registerLazySingleton<CanteenRemoteDataSource>(() => CanteenRemoteDataSourceImpl(
+      firestore: sl.call(),));
 
 
 

@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:mica_school_app/features/home/domain/entities/exam_entity.dart';
-import 'package:mica_school_app/features/home/domain/entities/subject_entity.dart';
-import 'package:mica_school_app/features/home/domain/usecases/get_exam_usecase.dart';
-import 'package:mica_school_app/features/home/domain/usecases/get_property_usecase.dart';
+import 'package:mica_school_app/features/home/domain/entities/schedule_entities/exam_entity.dart';
+import 'package:mica_school_app/features/home/domain/entities/schedule_entities/subject_entity.dart';
+import 'package:mica_school_app/features/home/domain/usecases/schedule_usecases/get_exam_usecase.dart';
+import 'package:mica_school_app/features/home/domain/usecases/schedule_usecases/get_subject_usecase.dart';
 
 part 'schedule_state.dart';
 

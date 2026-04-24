@@ -9,6 +9,7 @@ import 'package:mica_school_app/features/authentication/domain/repositories/auth
 
 
 class AuthRepoImpl implements AuthRepo {
+
   final AuthRemoteDataSource authRemoteDataSource;
 
   AuthRepoImpl({required this.authRemoteDataSource});
@@ -17,9 +18,13 @@ class AuthRepoImpl implements AuthRepo {
   Future<bool> isSignIn() async 
   => authRemoteDataSource.isSignIn();
 
+
+
   @override
   Future<UserEntity> signInUser(UserEntity user, BuildContext context) async
   => authRemoteDataSource.signInUser(user, context);
+
+
 
   @override
   Future<void> signOut() async

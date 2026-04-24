@@ -9,7 +9,10 @@ import 'package:mica_school_app/features/authentication/presentation/cubit/crede
 import 'package:mica_school_app/features/authentication/presentation/cubit/get_single_user_cubit/get_single_user_cubit.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/user_cubit/user_cubit.dart';
 import 'package:mica_school_app/features/authentication/presentation/screens/login_screen.dart';
+import 'package:mica_school_app/features/canteen/presentation/cubit/canteen_cubit.dart';
+import 'package:mica_school_app/features/home/presentation/cubit/fees_cubit/fees_cubit.dart';
 import 'package:mica_school_app/features/home/presentation/cubit/schedule_cubit/schedule_cubit.dart';
+import 'package:mica_school_app/features/home/presentation/cubit/teacher_rating_cubit/teacher_rating_cubit.dart';
 import 'package:mica_school_app/features/homework/presentation/cubit/homework_cubit.dart';
 import 'package:mica_school_app/main_page.dart';
 
@@ -68,6 +71,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => di.sl<ScheduleCubit>()),
         BlocProvider(create: (_) => di.sl<AttendanceScanCubit>()),
         BlocProvider(create: (_) => di.sl<AttendanceLogsCubit>()),
+        BlocProvider(create: (_) => di.sl<FeesCubit>()),
+        BlocProvider(create: (_) => di.sl<TeacherRatingCubit>()),
+        BlocProvider(create: (_) => di.sl<CanteenCubit>()),
         BlocProvider(create: (_) => di.sl<HomeworkCubit>()),
         BlocProvider(
           create: (_) =>

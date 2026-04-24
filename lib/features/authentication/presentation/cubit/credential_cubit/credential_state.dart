@@ -10,7 +10,19 @@ abstract class CredentialState extends Equatable {
 
 class CredentialInitial extends CredentialState {}
 
+
+
+
+//==================================================================================
+
+
+
 class CredentialLoading extends CredentialState {}
+
+
+//==================================================================================
+
+
 
 class CredentialSuccess extends CredentialState {
   final UserEntity user; // ✅ ADD THIS
@@ -20,6 +32,9 @@ class CredentialSuccess extends CredentialState {
   @override
   List<Object?> get props => [user];
 }
+
+
+//==================================================================================
 
 class CredentialFailure extends CredentialState {
   final String errorMessage;

@@ -6,8 +6,15 @@ class GetCurrentUidUsecase {
 
   GetCurrentUidUsecase({required this.repository});
 
-  Future<String> call() {
-    final user = FirebaseAuth.instance.currentUser;
-    return repository.getCurrentUid();
+  Future<String> call() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        return user.uid;
+      }
+      return '';
+    } catch (e) {
+      return '';
+    }
   }
 }

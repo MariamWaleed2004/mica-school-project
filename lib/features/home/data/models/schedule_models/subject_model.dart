@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mica_school_app/features/home/domain/entities/subject_entity.dart';
+import 'package:mica_school_app/features/home/domain/entities/schedule_entities/subject_entity.dart';
 
 class SubjectModel extends SubjectEntity {
   const SubjectModel({

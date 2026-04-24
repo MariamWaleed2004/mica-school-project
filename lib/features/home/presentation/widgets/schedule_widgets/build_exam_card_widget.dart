@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mica_school_app/core/utils.dart';
-import 'package:mica_school_app/features/home/domain/entities/exam_entity.dart';
+import 'package:mica_school_app/features/home/domain/entities/schedule_entities/exam_entity.dart';
 
 class BuildExamCardWidget extends StatelessWidget {
   final ExamEntity exam;

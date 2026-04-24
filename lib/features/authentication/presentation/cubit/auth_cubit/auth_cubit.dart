@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mica_school_app/core/const.dart';
 
@@ -25,7 +26,11 @@ class AuthCubit extends Cubit<AuthState> {
       bool isSignIn = await isSignInUsecase.call();
       if (isSignIn == true) {
         final uid = await getCurrentUidUsecase.call();
-        emit(Authenticated(uid: uid));
+        if (uid.isNotEmpty) {
+          emit(Authenticated(uid: uid));
+        } else {
+          emit(UnAuthenticated());
+        }
       } else {
         emit(UnAuthenticated());
       }
@@ -36,10 +41,14 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> loggedIn() async {
     try {
-      final uid = await getCurrentUidUsecase.call();
-      emit(Authenticated(uid: uid));
-    } catch (_) {
-      toast("Invalid id or password");
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null && user.uid.isNotEmpty) {
+        emit(Authenticated(uid: user.uid));
+      } else {
+        emit(UnAuthenticated());
+      }
+    } catch (e) {
+      print("loggedIn error: $e");
       emit(UnAuthenticated());
     }
   }
