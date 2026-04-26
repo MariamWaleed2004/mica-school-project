@@ -13,7 +13,7 @@ import 'package:mica_school_app/features/authentication/presentation/cubit/auth_
 import 'package:mica_school_app/features/canteen/presentation/screens/canteen_screen.dart';
 import 'package:mica_school_app/features/home/presentation/screens/fees_screen.dart';
 import 'package:mica_school_app/features/home/presentation/screens/home_screen.dart';
-import 'package:mica_school_app/features/homework/presentation/screens/Homework.dart';
+import 'package:mica_school_app/features/homework/presentation/screens/homework_screen.dart';
 import 'package:mica_school_app/Notifications.dart';
 import 'package:mica_school_app/features/home/presentation/screens/schedule_screen.dart';
 import 'package:mica_school_app/features/authentication/presentation/screens/login_screen.dart';

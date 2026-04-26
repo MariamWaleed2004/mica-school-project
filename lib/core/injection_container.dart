@@ -167,6 +167,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<CanteenRemoteDataSource>(() => CanteenRemoteDataSourceImpl(
       firestore: sl.call(),));
+  
+  sl.registerLazySingleton<HomeworkRemoteDataSource>(() => HomeworkRemoteDataSourceImpl(
+      firebaseFirestore: sl.call(),));
 
 
 

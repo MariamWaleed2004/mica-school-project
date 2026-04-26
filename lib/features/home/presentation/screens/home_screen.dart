@@ -94,7 +94,7 @@
 //   void initState() {
 //     super.initState();
 //     context.read<GetSingleUserCubit>().getSingleUser(
-//       uid: FirebaseAuth.instance.currentUser!.uid, 
+//       uid: FirebaseAuth.instance.currentUser!.uid,
 //   );
 
 //     _controller = AnimationController(
@@ -104,8 +104,6 @@
 //     _fadeAnim = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
 //     _controller.forward();
 //   }
-
-  
 
 //   @override
 //   void dispose() {
@@ -138,7 +136,6 @@
 //                   crossAxisAlignment: CrossAxisAlignment.start,
 //                   children: [
 
-
 //    // --------------------------- Build Header Widget -------------------------------------------
 //                     BuildHeaderWidget(
 //                       isDark: false,
@@ -148,7 +145,7 @@
 //                       nameEn: user.nameEn ?? "UserEN",
 //                       isActive: user.isActive ?? false,
 //                     ),
-                    
+
 //                     Padding(
 //                       padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
 //                       child: Column(
@@ -169,14 +166,12 @@
 //                           ),
 //                           const SizedBox(height: 24),
 
-             
 //                           _buildSectionLabel(
 //                             widget.isArabic ? "جدولك" : "Your Schedule",
 //                             textColor,
 //                           ),
 //                           const SizedBox(height: 12),
 
-                          
 // // ----------------------------------- Build Schedule Button Widget ----------------------------------
 //                           BuildScheduleButton(
 //                             isDark: isDark,
@@ -235,7 +230,6 @@
 //       },
 //     );
 //   }
-  
 
 //   Widget _buildTeacherRatings(bool isDark, Color cardColor, Color textColor) {
 //     return Column(
@@ -373,8 +367,6 @@
 //       letterSpacing: 0.2,
 //     ),
 //   );
-
-
 
 //   Widget _buildFeesCard(bool isDark, Color cardColor, Color textColor) {
 //     return GestureDetector(
@@ -538,12 +530,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/get_single_user_cubit/get_single_user_cubit.dart';
 import 'package:mica_school_app/features/home/presentation/cubit/teacher_rating_cubit/teacher_rating_cubit.dart';
+import 'package:mica_school_app/features/homework/presentation/screens/homework_screen.dart';
 import 'package:mica_school_app/features/home/presentation/widgets/build_grade_badge_widget.dart';
 import 'package:mica_school_app/features/home/presentation/widgets/build_header.dart';
 import 'package:mica_school_app/features/home/presentation/widgets/schedule_card_widget.dart';
 import 'package:mica_school_app/features/home/presentation/widgets/section_label_widget.dart';
 import 'package:mica_school_app/features/home/presentation/widgets/fees_card_widget.dart';
-import 'package:mica_school_app/features/home/presentation/widgets/homework_card_widget.dart';
+import 'package:mica_school_app/features/homework/presentation/widgets/homework_card_widget.dart';
 import 'package:mica_school_app/features/home/presentation/widgets/teacher_rating_section_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -570,11 +563,11 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    
+
     context.read<GetSingleUserCubit>().getSingleUser(
       uid: FirebaseAuth.instance.currentUser!.uid,
     );
-    
+
     context.read<TeacherRatingCubit>().getTeacherRatings(
       FirebaseAuth.instance.currentUser!.uid,
     );
@@ -607,10 +600,10 @@ class _HomeScreenState extends State<HomeScreen>
             body: Center(child: CircularProgressIndicator()),
           );
         }
-        
+
         if (userState is GetSingleUserLoaded) {
           final user = userState.user;
-          
+
           return Scaffold(
             backgroundColor: bg,
             body: FadeTransition(
@@ -624,12 +617,13 @@ class _HomeScreenState extends State<HomeScreen>
                     BuildHeaderWidget(
                       isDark: false,
                       isArabic: widget.isArabic,
-                      profileImageUrl: widget.profileImage ?? user.profileImageUrl,
+                      profileImageUrl:
+                          widget.profileImage ?? user.profileImageUrl,
                       nameAr: user.nameAr ?? "UserAr",
                       nameEn: user.nameEn ?? "UserEN",
                       isActive: user.isActive ?? false,
                     ),
-                    
+
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
                       child: Column(
@@ -655,7 +649,7 @@ class _HomeScreenState extends State<HomeScreen>
                             color: textColor,
                           ),
                           const SizedBox(height: 12),
-                          
+
                           ScheduleCardWidget(
                             isDark: isDark,
                             isArabic: widget.isArabic,
@@ -663,7 +657,7 @@ class _HomeScreenState extends State<HomeScreen>
                           ),
 
                           const SizedBox(height: 24),
-                          
+
                           // Fees Section
                           SectionLabelWidget(
                             text: widget.isArabic ? "مصاريفك" : "Your Fees",
@@ -679,26 +673,30 @@ class _HomeScreenState extends State<HomeScreen>
                           ),
 
                           const SizedBox(height: 24),
-                          
+
                           // Homework Section
                           SectionLabelWidget(
                             text: widget.isArabic ? "الواجبات" : "Homework",
                             color: textColor,
                           ),
                           const SizedBox(height: 12),
-                          HomeworkCardWidget(
+                            HomeworkCardWidget(
                             isDark: isDark,
                             isArabic: widget.isArabic,
                             cardColor: cardColor,
                             textColor: textColor,
-                            onTap: () => widget.onNavigate('homework'),
+                            onTap: () => widget.onNavigate(
+                              'homework',
+                            ), // هذا سينادي الـ handleNavigation
                           ),
 
                           const SizedBox(height: 24),
-                          
+
                           // Teacher Ratings Section
                           SectionLabelWidget(
-                            text: widget.isArabic ? "⭐ تقييمات المدرسين" : "⭐ Teacher Ratings",
+                            text: widget.isArabic
+                                ? "⭐ تقييمات المدرسين"
+                                : "⭐ Teacher Ratings",
                             color: textColor,
                           ),
                           const SizedBox(height: 4),
@@ -729,7 +727,7 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           );
         }
-        
+
         return const Scaffold(
           body: Center(child: Text("Error loading user data")),
         );

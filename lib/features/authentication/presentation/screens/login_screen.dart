@@ -461,7 +461,7 @@ Widget build(BuildContext context) {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            "University Smart Watch System",
+                            "School Smart Watch System",
                             style: TextStyle(
                               fontSize: 12,
                               letterSpacing: 0.5,
