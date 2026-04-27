@@ -32,19 +32,7 @@ class _LoginScreenState extends State<LoginScreen>
   late Animation<double> _formFade;
   late Animation<Offset> _formSlide;
 
-
-
-
-
-
   bool _isSigningIn = false;
-
-
-
-
-
-
-
 
   bool isDarkMode = false;
   bool isArabic = true;
@@ -84,114 +72,418 @@ class _LoginScreenState extends State<LoginScreen>
     super.dispose();
   }
 
+  // void _showForgotPasswordDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       final isDark = Theme.of(context).brightness == Brightness.dark;
+  //       return Dialog(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(24),
+  //         ),
+  //         backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(28),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Container(
+  //                 width: 56,
+  //                 height: 56,
+  //                 decoration: const BoxDecoration(
+  //                   shape: BoxShape.circle,
+  //                   gradient: LinearGradient(
+  //                     colors: [Color(0xFF4F46E5), Color(0xFF06B6D4)],
+  //                   ),
+  //                 ),
+  //                 child: const Icon(
+  //                   Icons.lock_reset_rounded,
+  //                   color: Colors.white,
+  //                   size: 28,
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 16),
+  //               Text(
+  //                 "Reset Password",
+  //                 style: TextStyle(
+  //                   fontSize: 20,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: isDark ? Colors.white : const Color(0xFF0F172A),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 8),
+  //               Text(
+  //                 "Enter your university email",
+  //                 style: TextStyle(
+  //                   color: isDark ? Colors.grey[400] : Colors.grey[600],
+  //                   fontSize: 13,
+  //                 ),
+  //               ),
+  //               // const SizedBox(height: 20),
+  //               // _buildTextField(
+  //               //   "example@university.edu",
+  //               //   Icons.email_outlined,
+  //               //   false,
+  //               //   isDark,
+  //               // ),
+  //               const SizedBox(height: 24),
+  //               Row(
+  //                 children: [
+  //                   Expanded(
+  //                     child: TextButton(
+  //                       onPressed: () => Navigator.pop(context),
+  //                       child: const Text(
+  //                         "Cancel",
+  //                         style: TextStyle(color: Colors.grey),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(width: 12),
+  //                   Expanded(
+  //                     child: Container(
+  //                       height: 46,
+  //                       decoration: BoxDecoration(
+  //                         gradient: const LinearGradient(
+  //                           colors: [Color(0xFF4F46E5), Color(0xFF06B6D4)],
+  //                         ),
+  //                         borderRadius: BorderRadius.circular(14),
+  //                       ),
+  //                       child: TextButton(
+  //                         onPressed: () {
+  //                           Navigator.pop(context);
+  //                           ScaffoldMessenger.of(context).showSnackBar(
+  //                             SnackBar(
+  //                               content: const Text("Reset code sent!"),
+  //                               behavior: SnackBarBehavior.floating,
+  //                               backgroundColor: const Color(0xFF10B981),
+  //                               shape: RoundedRectangleBorder(
+  //                                 borderRadius: BorderRadius.circular(14),
+  //                               ),
+  //                             ),
+  //                           );
+  //                         },
+  //                         child: const Text(
+  //                           "Send",
+  //                           style: TextStyle(
+  //                             color: Colors.white,
+  //                             fontWeight: FontWeight.bold,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
   void _showForgotPasswordDialog() {
+    final emailController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    bool isLoading = false;
+
     showDialog(
       context: context,
+      barrierDismissible: !isLoading,
       builder: (context) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
-          backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(28),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF4F46E5), Color(0xFF06B6D4)],
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.lock_reset_rounded,
-                    color: Colors.white,
-                    size: 28,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  "Reset Password",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: isDark ? Colors.white : const Color(0xFF0F172A),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "Enter your university email",
-                  style: TextStyle(
-                    color: isDark ? Colors.grey[400] : Colors.grey[600],
-                    fontSize: 13,
-                  ),
-                ),
-                // const SizedBox(height: 20),
-                // _buildTextField(
-                //   "example@university.edu",
-                //   Icons.email_outlined,
-                //   false,
-                //   isDark,
-                // ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text(
-                          "Cancel",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Container(
-                        height: 46,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF4F46E5), Color(0xFF06B6D4)],
-                          ),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text("Reset code sent!"),
-                                behavior: SnackBarBehavior.floating,
-                                backgroundColor: const Color(0xFF10B981),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            "Send",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(28),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 56,
+                          height: 56,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [Color(0xFF4F46E5), Color(0xFF06B6D4)],
                             ),
                           ),
+                          child: const Icon(
+                            Icons.lock_reset_rounded,
+                            color: Colors.white,
+                            size: 28,
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "Reset Password",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: isDark
+                                ? Colors.white
+                                : const Color(0xFF0F172A),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "Enter your school email to receive a reset link",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: isDark ? Colors.grey[400] : Colors.grey[600],
+                            fontSize: 13,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          controller: emailController,
+                          enabled: !isLoading,
+                          style: TextStyle(
+                            color: isDark ? Colors.white : Colors.black,
+                          ),
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.email_outlined,
+                              color: isDark
+                                  ? Colors.grey[400]
+                                  : Colors.grey[600],
+                            ),
+                            hintText: "student@school.edu",
+                            hintStyle: TextStyle(
+                              color: isDark
+                                  ? Colors.grey[500]
+                                  : Colors.grey[400],
+                            ),
+                            filled: true,
+                            fillColor: isDark
+                                ? Colors.white.withOpacity(0.05)
+                                : Colors.grey[100],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF4F46E5),
+                                width: 1.5,
+                              ),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14),
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter your email";
+                            }
+                            final emailRegex = RegExp(
+                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                            );
+                            if (!emailRegex.hasMatch(value)) {
+                              return "Enter a valid email address";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () => Navigator.pop(context),
+                                child: Text(
+                                  "Cancel",
+                                  style: TextStyle(
+                                    color: isLoading
+                                        ? Colors.grey
+                                        : Colors.grey[600],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Container(
+                                height: 46,
+                                // width: 30,
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      Color(0xFF4F46E5),
+                                      Color(0xFF06B6D4),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: ElevatedButton(
+                                  onPressed: isLoading
+                                      ? null
+                                      : () async {
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            final email = emailController.text
+                                                .trim();
+
+                                            setDialogState(() {
+                                              isLoading = true;
+                                            });
+
+                                            try {
+                                              await FirebaseAuth.instance
+                                                  .sendPasswordResetEmail(
+                                                    email: email,
+                                                  );
+
+                                              if (mounted) {
+                                                Navigator.pop(context);
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      "Password reset link sent to $email",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    behavior: SnackBarBehavior
+                                                        .floating,
+                                                    backgroundColor:
+                                                        const Color(0xFF10B981),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            14,
+                                                          ),
+                                                    ),
+                                                    duration: const Duration(
+                                                      seconds: 4,
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            } catch (e) {
+                                              setDialogState(() {
+                                                isLoading = false;
+                                              });
+
+                                              String errorMessage =
+                                                  "Failed to send reset email";
+                                              if (e is FirebaseAuthException) {
+                                                switch (e.code) {
+                                                  case 'user-not-found':
+                                                    errorMessage =
+                                                        "No account found with this email";
+                                                    break;
+                                                  case 'invalid-email':
+                                                    errorMessage =
+                                                        "Invalid email address";
+                                                    break;
+                                                  case 'too-many-requests':
+                                                    errorMessage =
+                                                        "Too many requests. Please try again later";
+                                                    break;
+                                                  default:
+                                                    errorMessage =
+                                                        e.message ??
+                                                        errorMessage;
+                                                }
+                                              }
+
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(errorMessage),
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  backgroundColor: Colors.red,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          14,
+                                                        ),
+                                                  ),
+                                                  duration: const Duration(
+                                                    seconds: 3,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                  ),
+                                  child: isLoading
+                                      ? const Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation(
+                                                      Colors.white,
+                                                    ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 8),
+                                            // Text(
+                                            //   "Sending...",
+                                            //   style: TextStyle(
+                                            //     color: Colors.white,
+                                            //     fontWeight: FontWeight.bold,
+                                            //   ),
+                                            // ),
+                                          ],
+                                        )
+                                      : const Text(
+                                          "Send Link",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                          ),
+                                          softWrap: false,
+                                        ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
-    );
+    ).then((_) {
+      emailController.dispose();
+    });
   }
 
   bool _validatePassword(String password) {
@@ -205,7 +497,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   String? _validateField(String? value, String fieldType) {
     if (fieldType == "email" && !_validateId(value!)) {
-      return "Please enter a valid email address.";
+      return "Please enter a valid ID.";
     }
 
     if (fieldType == "password" && !_validatePassword(value!)) {
@@ -233,124 +525,109 @@ class _LoginScreenState extends State<LoginScreen>
 
   // -------------------------------------------------- Build Method ------------------------------------------------------------------------
 
+  //   @override
+  //   Widget build(BuildContext context) {
+  //     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final isDark = Theme.of(context).brightness == Brightness.dark;
+  //     return Scaffold(
+  //       body: BlocConsumer<CredentialCubit, CredentialState>(
+  //         listener: (context, credentialState) {
 
-//     return Scaffold(
-//       body: BlocConsumer<CredentialCubit, CredentialState>(
-//         listener: (context, credentialState) {
+  // // BlocConsumer (
+  // //hfgjfjfjfgnjgnjgnbjgggfjbg hghhguhgu jhgj
+  // //)
 
-// // BlocConsumer (
-// //hfgjfjfjfgnjgnjgnbjgggfjbg hghhguhgu jhgj
-// //)
+  //           if (credentialState is CredentialLoading) {
+  //             setState(() {
+  //               _isSigningIn = true;
+  //             });
+  //           }
 
+  //           if (credentialState is CredentialSuccess) {
+  //             BlocProvider.of<AuthCubit>(context).loggedIn();
+  //             setState(() {
+  //               _isSigningIn = false;
+  //             });
+  //           }
 
+  //           if (credentialState is CredentialFailure) {
+  //             setState(() {
+  //               _isSigningIn = false;
+  //             });
+  //           }
+  //         },
 
-//           if (credentialState is CredentialLoading) {
-//             setState(() {
-//               _isSigningIn = true;
-//             });
-//           }
+  //         builder: (context, credentailState) {
 
+  //           if (credentailState is CredentialSuccess) {
 
-//           if (credentialState is CredentialSuccess) {
-//             BlocProvider.of<AuthCubit>(context).loggedIn();
-//             setState(() {
-//               _isSigningIn = false;
-//             });
-//           }
+  //             return BlocBuilder<AuthCubit, AuthState>(
+  //               builder: (context, authState) {
+  //                 if (authState is Authenticated) {
+  //                   return MainPage(
+  //                     isDarkMode: isDarkMode,
+  //                     isArabic: isArabic,
+  //                     onThemeToggle: toggleTheme,
+  //                     onLanguageToggle: toggleLanguage,
+  //                   );
 
+  //                 } else {
+  //                   return _bodyWidget();
+  //                 }
+  //               },
+  //             );
+  //           }
+  //           return _bodyWidget();
+  //         },
+  //       ),
+  //     );
+  //   }
 
+  // LoginScreen.dart
 
-//           if (credentialState is CredentialFailure) {
-//             setState(() {
-//               _isSigningIn = false;
-//             });
-//           }
-//         },
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocConsumer<CredentialCubit, CredentialState>(
+        listener: (context, credentialState) {
+          if (credentialState is CredentialLoading) {
+            setState(() => _isSigningIn = true);
+          }
 
+          if (credentialState is CredentialSuccess) {
+            setState(() => _isSigningIn = false);
+            context.read<AuthCubit>().loggedIn();
+          }
 
-
-
-
-//         builder: (context, credentailState) {
-
-
-
-
-//           if (credentailState is CredentialSuccess) {
-
-//             return BlocBuilder<AuthCubit, AuthState>(
-//               builder: (context, authState) {
-//                 if (authState is Authenticated) {
-//                   return MainPage(
-//                     isDarkMode: isDarkMode,
-//                     isArabic: isArabic,
-//                     onThemeToggle: toggleTheme,
-//                     onLanguageToggle: toggleLanguage,
-//                   );
-                  
-//                 } else {
-//                   return _bodyWidget();
-//                 }
-//               },
-//             );
-//           }
-//           return _bodyWidget();
-//         },
-//       ),
-//     );
-//   }
-
-
-// LoginScreen.dart
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: BlocConsumer<CredentialCubit, CredentialState>(
-      listener: (context, credentialState) {
-        if (credentialState is CredentialLoading) {
-          setState(() => _isSigningIn = true);
-        }
-
-        if (credentialState is CredentialSuccess) {
-          setState(() => _isSigningIn = false);
-          // 🔥 تأكدي أن AuthCubit يتحدث بعد نجاح تسجيل الدخول
-          context.read<AuthCubit>().loggedIn();
-        }
-
-        if (credentialState is CredentialFailure) {
-          setState(() => _isSigningIn = false);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(credentialState.errorMessage),
-              backgroundColor: Colors.red,
-            ),
+          if (credentialState is CredentialFailure) {
+            setState(() => _isSigningIn = false);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(credentialState.errorMessage),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        builder: (context, credentialState) {
+          return BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, authState) {
+              if (authState is Authenticated) {
+                return MainPage(
+                  isDarkMode: isDarkMode,
+                  isArabic: isArabic,
+                  onThemeToggle: toggleTheme,
+                  onLanguageToggle: toggleLanguage,
+                );
+              }
+              return _bodyWidget();
+            },
           );
-        }
-      },
-      builder: (context, credentialState) {
-        return BlocBuilder<AuthCubit, AuthState>(
-          builder: (context, authState) {
-            // 🔥 إذا كان المستخدم مصادق عليه، اذهب للـ MainPage
-            if (authState is Authenticated) {
-              return MainPage(
-                isDarkMode: isDarkMode,
-                isArabic: isArabic,
-                onThemeToggle: toggleTheme,
-                onLanguageToggle: toggleLanguage,
-              );
-            }
-            return _bodyWidget();
-          },
-        );
-      },
-    ),
-  );
-}
+        },
+      ),
+    );
+  }
+
   _bodyWidget() {
     double width = AppSizes.screenWidth(context);
     double height = AppSizes.screenHeight(context);
@@ -360,7 +637,6 @@ Widget build(BuildContext context) {
       key: _formKey,
       child: Stack(
         children: [
-          // Animated Background
           AnimatedBuilder(
             animation: _bgController,
             builder: (_, __) => CustomPaint(
@@ -498,8 +774,8 @@ Widget build(BuildContext context) {
 
                           // =========================== Login Button ==============================
                           Container(
-                            width: double.infinity, // full width
-                            height: 50, // height of the button
+                            width: double.infinity,
+                            height: 50, 
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
@@ -512,31 +788,26 @@ Widget build(BuildContext context) {
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: ElevatedButton(
-
-
-
-                       //========================================================       
-                              onPressed:
-                               _isSigningIn
+                              //========================================================
+                              onPressed: _isSigningIn
                                   ? null
                                   : () {
                                       if (_formKey.currentState!.validate()) {
                                         _signInUser();
                                       }
                                     },
-                       //========================================================       
 
+                              //========================================================
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors
-                                    .transparent, // Make button transparent
+                                    .transparent, 
                                 shadowColor:
-                                    Colors.transparent, // Remove default shadow
+                                    Colors.transparent, 
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                               ),
 
-                             // issinging in true        ?     fhvfhvfhvf : fbvvjfvjfvbjf 
                               child: _isSigningIn == false
                                   ? Text(
                                       'Sign In',
@@ -572,7 +843,6 @@ Widget build(BuildContext context) {
                             ),
                           ),
 
-                         
                           const SizedBox(height: 16),
                           // =========================== Forgot Password Link =============================
                           TextButton(
@@ -625,8 +895,3 @@ Widget build(BuildContext context) {
     });
   }
 }
-
-
-
-
-

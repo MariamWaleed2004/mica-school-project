@@ -231,52 +231,58 @@ class _AttendanceScreenState extends State<AttendanceScreen> with SingleTickerPr
           final currentMonth = _getMonthNumber(_monthsAr[_selectedMonthIndex]);
           final stats = _calculateMonthStats(monthLogs, currentMonth, _currentYear);
           
-          return Directionality(
-            textDirection: isAr ? TextDirection.rtl : TextDirection.ltr,
-            child: Scaffold(
-              backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF0F4FF),
-              body: FadeTransition(
-                opacity: _fadeAnim,
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      AttendanceHeaderWidget(
-                        isArabic: isAr,
-                        isDark: isDark,
-                        attendedDays: stats['attended'],
-                        absentDays: stats['absent'],
-                        attendanceRate: stats['rate'],
-                        selectedMonthIndex: _selectedMonthIndex,
-                        monthsAr: _monthsAr,
-                        monthsEn: _monthsEn,
-                        onMonthChanged: (newIndex) {
-                          _changeMonth(newIndex);
-                        },
-                      ),
-                      
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          children: List.generate(
-                            4,
-                            (i) => AttendanceWeekSection(
-                              weekNum: i + 1,
-                              isAr: isAr,
-                              isDark: isDark,
-                              logs: monthLogs,
-                              monthName: _monthsAr[_selectedMonthIndex],
-                              cardColor: cardColor,
-                              textColor: textColor,
-                              currentYear: _currentYear,
-                              getMonthNumber: _getMonthNumber,
-                              getDateForWeekDay: _getDateForWeekDay,
+          return RefreshIndicator(
+            onRefresh: () async {
+            context.read<AttendanceLogsCubit>().getStudentLogs(widget.userId);
+            return Future.value();
+          },
+            child: Directionality(
+              textDirection: isAr ? TextDirection.rtl : TextDirection.ltr,
+              child: Scaffold(
+                backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF0F4FF),
+                body: FadeTransition(
+                  opacity: _fadeAnim,
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        AttendanceHeaderWidget(
+                          isArabic: isAr,
+                          isDark: isDark,
+                          attendedDays: stats['attended'],
+                          absentDays: stats['absent'],
+                          attendanceRate: stats['rate'],
+                          selectedMonthIndex: _selectedMonthIndex,
+                          monthsAr: _monthsAr,
+                          monthsEn: _monthsEn,
+                          onMonthChanged: (newIndex) {
+                            _changeMonth(newIndex);
+                          },
+                        ),
+                        
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            children: List.generate(
+                              4,
+                              (i) => AttendanceWeekSection(
+                                weekNum: i + 1,
+                                isAr: isAr,
+                                isDark: isDark,
+                                logs: monthLogs,
+                                monthName: _monthsAr[_selectedMonthIndex],
+                                cardColor: cardColor,
+                                textColor: textColor,
+                                currentYear: _currentYear,
+                                getMonthNumber: _getMonthNumber,
+                                getDateForWeekDay: _getDateForWeekDay,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 60),
-                    ],
+                        const SizedBox(height: 60),
+                      ],
+                    ),
                   ),
                 ),
               ),
