@@ -1,8 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mica_school_app/core/const.dart';
+import 'package:bloc/bloc.dart';
 
 import 'package:mica_school_app/features/authentication/domain/usecases/get_current_uid_usecase.dart';
 import 'package:mica_school_app/features/authentication/domain/usecases/is_sign_in_usecase.dart';
@@ -21,6 +20,11 @@ class AuthCubit extends Cubit<AuthState> {
     required this.getCurrentUidUsecase,
   }) : super(AuthInitial());
 
+
+
+
+
+
   Future<void> appStarted(BuildContext context) async {
     try {
       bool isSignIn = await isSignInUsecase.call();
@@ -38,6 +42,13 @@ class AuthCubit extends Cubit<AuthState> {
       emit(UnAuthenticated());
     }
   }
+
+ 
+
+
+
+
+
 
   Future<void> loggedIn() async {
     try {

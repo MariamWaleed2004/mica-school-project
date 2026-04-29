@@ -1,5 +1,3 @@
-// lib/features/canteen/presentation/widgets/section_header_widget.dart
-
 import 'package:flutter/material.dart';
 
 class SectionHeaderWidget extends StatelessWidget {

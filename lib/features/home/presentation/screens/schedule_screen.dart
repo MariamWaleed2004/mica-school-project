@@ -22,10 +22,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   late Animation<double> _fade;
 
 
-
-
-
-
 // ========================================= Init State ======================================================
   @override
 void initState() {

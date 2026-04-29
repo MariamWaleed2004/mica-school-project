@@ -1,5 +1,3 @@
-// lib/features/canteen/domain/entities/canteen_month_entity.dart
-
 import 'package:equatable/equatable.dart';
 
 class PurchaseEntity extends Equatable {
@@ -36,7 +34,6 @@ class CanteenMonthEntity extends Equatable {
     required this.dailyPurchases,
   });
 
-  // 🔥 دالة مساعدة لتحديث البيانات
   CanteenMonthEntity copyWith({
     String? monthKey,
     double? balance,

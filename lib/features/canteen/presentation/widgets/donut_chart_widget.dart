@@ -1,5 +1,3 @@
-// lib/features/canteen/presentation/widgets/donut_chart_widget.dart
-
 import 'package:flutter/material.dart';
 import 'package:mica_school_app/features/canteen/presentation/widgets/donut_chart_painter.dart';
 

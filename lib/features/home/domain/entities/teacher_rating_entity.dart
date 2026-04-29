@@ -1,5 +1,3 @@
-// lib/features/home/domain/entities/teacher_rating_entity.dart
-
 import 'package:flutter/material.dart';
 
 class TeacherRatingEntity {
@@ -8,7 +6,7 @@ class TeacherRatingEntity {
   final String nameEn;
   final String subjectAr;
   final String subjectEn;
-  final int rating;  // 🔥 int
+  final int rating;  
   final String commentAr;
   final String commentEn;
   final String icon;

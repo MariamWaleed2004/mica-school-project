@@ -1,5 +1,3 @@
-// lib/features/canteen/presentation/widgets/donut_chart_painter.dart
-
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 

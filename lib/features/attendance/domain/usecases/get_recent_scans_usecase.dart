@@ -1,5 +1,3 @@
-
-
 import 'package:mica_school_app/features/attendance/domain/entities/attendance_scan_entity.dart';
 import 'package:mica_school_app/features/attendance/domain/repositories/attendance_repo.dart';
 

@@ -1,5 +1,3 @@
-// lib/features/canteen/presentation/widgets/daily_purchases_list_widget.dart
-
 import 'package:flutter/material.dart';
 
 class DailyPurchasesListWidget extends StatelessWidget {

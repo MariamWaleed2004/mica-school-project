@@ -1,5 +1,3 @@
-// lib/features/home/domain/usecases/get_teacher_ratings_usecase.dart
-
 import 'package:mica_school_app/features/home/domain/entities/teacher_rating_entity.dart';
 import 'package:mica_school_app/features/home/domain/repositories/home_repo.dart';
 

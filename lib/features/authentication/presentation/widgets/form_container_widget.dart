@@ -46,78 +46,7 @@ class _FormContainerWidgetState extends State<FormContainerWidget> {
   bool _nameIsValid = false;
   bool _isValid = false;
   bool _hasTyped = false;
-  //String? _errorMessage;
 
-
-
-  //  bool _validateInput(String value) {
-  //   if (widget.isPasswordField == true) {
-  //     return value.length >= 8 &&
-  //         RegExp(r'[A-Z]').hasMatch(value) &&
-  //         RegExp(r'[0-9]').hasMatch(value) &&
-  //         RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value);
-          
-  //   } else if (widget.isConfirmPasswordField == true) {
-  //     return value == widget.passwordController?.text;
-      
-  //   } 
-   
-  //   else if (widget.isEmailField == true) {
-  //     return value.contains("@");
-
-  //   } else if (widget.isNameField == true) {
-  //     return value.trim().isNotEmpty;
-  //   }
-  //   return true;
-  // }
-
-  // void _onChanged(String value) {
-  //   setState(() {
-  //     _hasTyped = true;
-  //     _isValid = _validateInput(value); 
-  //     _errorMessage = null; 
-  //   });
-  // }
-
-  // String? _validateField(String? value) {
-    //  if (widget.isNameField == true && !_validateInput(value!)) {
-    //   return "Please enter a valid name.";
-    // }
-
-  //   if (widget.isEmailField == true && !_validateInput(value!)) {
-  //     return "Please enter a valid email address.";
-  //   }
-  //   if (widget.isPasswordField == true && !_validateInput(value!)) {
-  //     return "Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character.";
-  //   }
-    // if (widget.isConfirmPasswordField == true &&
-    //     widget.passwordController != null &&
-    //     value != widget.passwordController!.text) {
-    //   return "Password and confirm password do not match";
-    // }
-
-  //   return null;
-    
-  // }
-
-  // bool _validatePassword(String password) {
-  //   return password.length >= 8 // At least 8 characters
-  //       &&
-  //       RegExp(r'[A-Z]').hasMatch(password) // At least one uppercase letter
-  //       &&
-  //       RegExp(r'[0-9]').hasMatch(password) // At least one number
-  //       &&
-  //       RegExp(r'[!@#$%^&*(),.?":{}|<>]')
-  //           .hasMatch(password); // At least one special character
-  // }
-
-  // bool _validateEmail(String email) {
-  //   return email.contains("@");
-  // }
-
-  // bool _validateName(String name) {
-  //   return name.trim().isNotEmpty;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -127,41 +56,10 @@ class _FormContainerWidgetState extends State<FormContainerWidget> {
         controller: widget.controller,
         key: widget.fieldKey,
         obscureText: widget.isPasswordField == true ? _obscureText : false,
-       validator: widget.validator,
-       
-      //  (value) {
-      //   if (widget.isEmailField == true && !_validateInput(value!)) {
-      //     return "Please enter a valid email address.";
-      //   }
-      //   if (widget.isPasswordField == true && !_validateInput(value!)) {
-      //     return "Password must be at least 8 characters long, contain an uppercase, a number, ans a special character.";
-      //   }
-      //   if (widget.isConfirmPasswordField != null && widget.passwordController != null) {
-      //     if (value != widget.passwordController!.text) {
-      //       return "Password and confirm password do not match";
-      //     }
-        
-      //   }
-      
-      // },
+   
         keyboardType: widget.inputType,
         onChanged: widget.onChanged,
-        // (value) {
-        //   setState(() {
-        //     _hasTyped = true;
-        //     // _isValid = _validateInput(value);
-        //     if (widget.isPasswordField == true) {
-        //       _passwordIsValid = _validatePassword(value);
-        //     } else if (widget.isConfirmPasswordField == true) {
-        //       _passwordIsValid = value == widget.passwordController?.text;
-        //     } else if (widget.isEmailField == true) {
-        //       _emailIsValid = _validateEmail(value);
-        //     } else if (widget.isNameField == true) {
-        //       _nameIsValid = _validateName(value);
-        //     }
-        //     _errorMessage = null;
-        //   });
-        // },
+
         decoration: InputDecoration(
           filled: false,
           hintText: widget.hintText,
@@ -187,36 +85,12 @@ class _FormContainerWidgetState extends State<FormContainerWidget> {
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: widget.isError ? Colors.red : Colors.grey,
-                //  _hasTyped 
-                //  ? (_isValid ? Colors.green : Colors.red)
-                //  : Colors.grey,
-                // widget.isNameField == true
-                //     ? (_nameIsValid ? Colors.green : Colors.red)
-                //     : widget.isPasswordField == true
-                //     ? (_passwordIsValid ? Colors.green : Colors.red)
-                //     : widget.isConfirmPasswordField == true
-                //     ? (_passwordIsValid ? Colors.green : Colors.red)
-                //     : widget.isEmailField == true
-                //     ? (_emailIsValid ? Colors.green : Colors.red)
-                //     : Colors.black,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(0)),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color:widget.isError ? Colors.red : Colors.grey,
-              //  _hasTyped 
-              //    ?(_isValid ? Colors.green : Colors.red)
-              //    : Colors.grey,
-              // widget.isNameField == true
-              //     ? (_nameIsValid ? Colors.green : Colors.red)
-              //     : widget.isPasswordField == true
-              //     ? (_passwordIsValid ? Colors.green : Colors.red)
-              //     : widget.isConfirmPasswordField == true
-              //     ? (_passwordIsValid ? Colors.green : Colors.red)
-              //     : widget.isEmailField == true
-              //     ? (_emailIsValid ? Colors.green : Colors.red)
-              //     : Colors.black,
               width: 1,
             ),
             borderRadius: BorderRadius.circular(0),

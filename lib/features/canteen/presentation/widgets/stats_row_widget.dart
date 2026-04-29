@@ -1,5 +1,3 @@
-// lib/features/canteen/presentation/widgets/stats_row_widget.dart
-
 import 'package:flutter/material.dart';
 
 class StatsRowWidget extends StatelessWidget {

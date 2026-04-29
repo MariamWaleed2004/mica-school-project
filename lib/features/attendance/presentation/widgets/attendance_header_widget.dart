@@ -49,7 +49,6 @@ class AttendanceHeaderWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // 🔥 أيقونة التقويم بس (من غير مربع ومن غير اسم شهر)
                   _buildMonthPicker(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -136,7 +135,6 @@ class AttendanceHeaderWidget extends StatelessWidget {
             color: Colors.white,
             size: 28,
           ),
-          // 🔥 خلي الـ icon بس من غير نص
           dropdownColor: const Color(0xFF1D4ED8),
           style: const TextStyle(
             color: Colors.white,

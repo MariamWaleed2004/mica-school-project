@@ -1,5 +1,3 @@
-// lib/features/fees/presentation/cubit/fees_state.dart
-
 import 'package:equatable/equatable.dart';
 import 'package:mica_school_app/features/home/domain/entities/fees_entities/fees_item_entity.dart';
 import 'package:mica_school_app/features/home/domain/entities/fees_entities/fees_summary_entity.dart';

@@ -24,18 +24,16 @@ class SubjectModel extends SubjectEntity {
           majorId: majorId,
         );
 
-  // 🔥 Convert HEX → Color
   static Color _hexToColor(String hex) {
     hex = hex.replaceAll('#', '').replaceAll('0x', '');
 
     if (hex.length == 6) {
-      hex = 'FF$hex'; // add opacity if missing
+      hex = 'FF$hex'; 
     }
 
     return Color(int.parse(hex, radix: 16));
   }
 
-  // 🔥 Convert Color → HEX (for saving)
   static String _colorToHex(Color color) {
     return '#${color.value.toRadixString(16).substring(2)}';
   }
@@ -68,7 +66,6 @@ class SubjectModel extends SubjectEntity {
       'nameEn': nameEn,
       'majorId': majorId,
 
-      // ✅ Save as HEX string
       'color': _colorToHex(color),
     };
   }

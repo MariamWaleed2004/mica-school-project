@@ -35,6 +35,8 @@ Future<List<SubjectEntity>> getSubjects(majorId) async {
       .toList();
 }
 
+
+
 @override
 Future<List<ExamEntity>> getExams(String majorId) async {
   final snapshot = await firebaseFirestore

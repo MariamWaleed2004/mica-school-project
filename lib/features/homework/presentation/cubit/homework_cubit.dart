@@ -1,5 +1,3 @@
-// lib/features/homework/presentation/cubit/homework_cubit.dart
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mica_school_app/features/homework/domain/entities/homework_entity.dart';
 import 'package:mica_school_app/features/homework/domain/usecases/get_homework_usecase.dart';

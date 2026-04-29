@@ -38,27 +38,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool isDarkMode = false;
   bool isArabic = true;
-  String? hardwareUid; // Add this line to store the hardware UID
-  // Example major ID, replace with actual value as needed
+  String? hardwareUid; 
 
   void toggleTheme() => setState(() => isDarkMode = !isDarkMode);
   void toggleLanguage() => setState(() => isArabic = !isArabic);
 
-  // void _handleLogin(BuildContext context, bool dark) {
-  //   setState(() => isDarkMode = dark);
-  //   Navigator.pushReplacement(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => MainPage(
-  //         isDarkMode: isDarkMode,
-  //         isArabic: isArabic,
-  //         onThemeToggle: toggleTheme,
-  //         onLanguageToggle: toggleLanguage,
-  //         onLogin: _handleLogin,
-  //       ),
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -138,16 +122,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-         // TextButton(
-                          //   onPressed: () async {
-                          //     await FirebaseAuth.instance.signOut();
-                          //   },
-                          //   child: Text(
-                          //     "Sign Out",
-                          //     style: TextStyle(
-                          //       fontSize: width * 0.04,
-                          //       color: const Color.fromARGB(255, 131, 36, 28),
-                          //     ),
-                          //   ),
-                          // ),

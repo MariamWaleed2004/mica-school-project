@@ -1,5 +1,3 @@
-// lib/features/canteen/data/datasources/canteen_remote_data_source_impl.dart
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mica_school_app/features/canteen/data/datasources/canteen_remote_data_source.dart';
 import 'package:mica_school_app/features/canteen/data/models/canteen_month_model.dart';
@@ -48,7 +46,6 @@ class CanteenRemoteDataSourceImpl implements CanteenRemoteDataSource {
       print("📌 Document ID: ${dayDoc.id}");
       print("   Data: $dayData");
       
-      // 🔥 استخدم nameAr و nameEn (مش dayAr/dayEn)
       final dayName = isArabic ? dayData['nameAr'] : dayData['nameEn'];
       print("   Day name ($isArabic): $dayName");
       

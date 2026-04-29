@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/credential_cubit/credential_state.dart';
-import 'package:mica_school_app/features/home/presentation/screens/home_screen.dart';
 import 'package:mica_school_app/core/const.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mica_school_app/features/authentication/presentation/cubit/credential_cubit/credential_cubit.dart';
@@ -11,7 +10,6 @@ import 'package:mica_school_app/features/authentication/presentation/widgets/tex
 import 'package:mica_school_app/main_page.dart';
 
 class LoginScreen extends StatefulWidget {
-  // final Function(BuildContext, bool) onLogin;
   final bool isArabic;
   const LoginScreen({Key? key, required this.isArabic}) : super(key: key);
 
@@ -22,7 +20,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  // final Key? feildKey;
 
   final _studentIdController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -72,115 +69,6 @@ class _LoginScreenState extends State<LoginScreen>
     super.dispose();
   }
 
-  // void _showForgotPasswordDialog() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       final isDark = Theme.of(context).brightness == Brightness.dark;
-  //       return Dialog(
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(24),
-  //         ),
-  //         backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(28),
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               Container(
-  //                 width: 56,
-  //                 height: 56,
-  //                 decoration: const BoxDecoration(
-  //                   shape: BoxShape.circle,
-  //                   gradient: LinearGradient(
-  //                     colors: [Color(0xFF4F46E5), Color(0xFF06B6D4)],
-  //                   ),
-  //                 ),
-  //                 child: const Icon(
-  //                   Icons.lock_reset_rounded,
-  //                   color: Colors.white,
-  //                   size: 28,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 16),
-  //               Text(
-  //                 "Reset Password",
-  //                 style: TextStyle(
-  //                   fontSize: 20,
-  //                   fontWeight: FontWeight.bold,
-  //                   color: isDark ? Colors.white : const Color(0xFF0F172A),
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 8),
-  //               Text(
-  //                 "Enter your university email",
-  //                 style: TextStyle(
-  //                   color: isDark ? Colors.grey[400] : Colors.grey[600],
-  //                   fontSize: 13,
-  //                 ),
-  //               ),
-  //               // const SizedBox(height: 20),
-  //               // _buildTextField(
-  //               //   "example@university.edu",
-  //               //   Icons.email_outlined,
-  //               //   false,
-  //               //   isDark,
-  //               // ),
-  //               const SizedBox(height: 24),
-  //               Row(
-  //                 children: [
-  //                   Expanded(
-  //                     child: TextButton(
-  //                       onPressed: () => Navigator.pop(context),
-  //                       child: const Text(
-  //                         "Cancel",
-  //                         style: TextStyle(color: Colors.grey),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                   const SizedBox(width: 12),
-  //                   Expanded(
-  //                     child: Container(
-  //                       height: 46,
-  //                       decoration: BoxDecoration(
-  //                         gradient: const LinearGradient(
-  //                           colors: [Color(0xFF4F46E5), Color(0xFF06B6D4)],
-  //                         ),
-  //                         borderRadius: BorderRadius.circular(14),
-  //                       ),
-  //                       child: TextButton(
-  //                         onPressed: () {
-  //                           Navigator.pop(context);
-  //                           ScaffoldMessenger.of(context).showSnackBar(
-  //                             SnackBar(
-  //                               content: const Text("Reset code sent!"),
-  //                               behavior: SnackBarBehavior.floating,
-  //                               backgroundColor: const Color(0xFF10B981),
-  //                               shape: RoundedRectangleBorder(
-  //                                 borderRadius: BorderRadius.circular(14),
-  //                               ),
-  //                             ),
-  //                           );
-  //                         },
-  //                         child: const Text(
-  //                           "Send",
-  //                           style: TextStyle(
-  //                             color: Colors.white,
-  //                             fontWeight: FontWeight.bold,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
   void _showForgotPasswordDialog() {
     final emailController = TextEditingController();
     final formKey = GlobalKey<FormState>();
@@ -449,14 +337,7 @@ class _LoginScreenState extends State<LoginScreen>
                                               ),
                                             ),
                                             SizedBox(width: 8),
-                                            // Text(
-                                            //   "Sending...",
-                                            //   style: TextStyle(
-                                            //     color: Colors.white,
-                                            //     fontWeight: FontWeight.bold,
-                                            //   ),
-                                            // ),
-                                          ],
+                                               ],
                                         )
                                       : const Text(
                                           "Send Link",
@@ -524,66 +405,6 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   // -------------------------------------------------- Build Method ------------------------------------------------------------------------
-
-  //   @override
-  //   Widget build(BuildContext context) {
-  //     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-  //     return Scaffold(
-  //       body: BlocConsumer<CredentialCubit, CredentialState>(
-  //         listener: (context, credentialState) {
-
-  // // BlocConsumer (
-  // //hfgjfjfjfgnjgnjgnbjgggfjbg hghhguhgu jhgj
-  // //)
-
-  //           if (credentialState is CredentialLoading) {
-  //             setState(() {
-  //               _isSigningIn = true;
-  //             });
-  //           }
-
-  //           if (credentialState is CredentialSuccess) {
-  //             BlocProvider.of<AuthCubit>(context).loggedIn();
-  //             setState(() {
-  //               _isSigningIn = false;
-  //             });
-  //           }
-
-  //           if (credentialState is CredentialFailure) {
-  //             setState(() {
-  //               _isSigningIn = false;
-  //             });
-  //           }
-  //         },
-
-  //         builder: (context, credentailState) {
-
-  //           if (credentailState is CredentialSuccess) {
-
-  //             return BlocBuilder<AuthCubit, AuthState>(
-  //               builder: (context, authState) {
-  //                 if (authState is Authenticated) {
-  //                   return MainPage(
-  //                     isDarkMode: isDarkMode,
-  //                     isArabic: isArabic,
-  //                     onThemeToggle: toggleTheme,
-  //                     onLanguageToggle: toggleLanguage,
-  //                   );
-
-  //                 } else {
-  //                   return _bodyWidget();
-  //                 }
-  //               },
-  //             );
-  //           }
-  //           return _bodyWidget();
-  //         },
-  //       ),
-  //     );
-  //   }
-
-  // LoginScreen.dart
 
   @override
   Widget build(BuildContext context) {

@@ -25,12 +25,11 @@ class ExamModel extends ExamEntity {
 
   IconData get iconData => AppIcons.get(icon);
 
-  // 🔥 Convert HEX → Color
   static Color _hexToColor(String hex) {
     hex = hex.replaceAll('#', '').replaceAll('0x', '');
 
     if (hex.length == 6) {
-      hex = 'FF$hex'; // add opacity if missing
+      hex = 'FF$hex'; 
     }
 
     return Color(int.parse(hex, radix: 16));

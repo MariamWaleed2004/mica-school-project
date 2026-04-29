@@ -1,5 +1,3 @@
-// lib/features/canteen/presentation/widgets/month_picker_widget.dart
-
 import 'package:flutter/material.dart';
 
 class MonthPickerWidget extends StatelessWidget {

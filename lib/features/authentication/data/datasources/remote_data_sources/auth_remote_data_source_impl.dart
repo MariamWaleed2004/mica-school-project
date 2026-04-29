@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -103,36 +101,6 @@ Future<UserEntity> getSingleUser(String uid) async {
 
   
 
-  void _showIfAccountExistsDialog(BuildContext context) {
-    showTopSnackBar(
-        Overlay.of(context),
-        Material(
-          elevation: 6,
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.warning,
-                  color: Colors.white,
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                    child: Text(
-                  "Account already exist, Please log in instead.",
-                  style: TextStyle(color: Colors.white),
-                ))
-              ],
-            ),
-          ),
-        ));
-  }
 
   void _showInvalidEmailOrPasswordDialog(BuildContext context) {
     showTopSnackBar(

@@ -1,5 +1,3 @@
-// lib/features/home/data/models/teacher_rating_model.dart
-
 import 'package:mica_school_app/features/home/domain/entities/teacher_rating_entity.dart';
 
 class TeacherRatingModel extends TeacherRatingEntity {
@@ -17,7 +15,6 @@ class TeacherRatingModel extends TeacherRatingEntity {
     required super.order,
   });
 
-  // 🔥 دالة لتحويل أي نوع إلى int
   static int _toInt(dynamic value) {
     if (value == null) return 0;
     if (value is int) return value;
@@ -26,7 +23,6 @@ class TeacherRatingModel extends TeacherRatingEntity {
     return 0;
   }
 
-  // 🔥 دالة لتحويل أي نوع إلى String
   static String _toString(dynamic value) {
     if (value == null) return '';
     return value.toString();
@@ -39,7 +35,7 @@ class TeacherRatingModel extends TeacherRatingEntity {
       nameEn: _toString(map['nameEn']),
       subjectAr: _toString(map['subjectAr']),
       subjectEn: _toString(map['subjectEn']),
-      rating: _toInt(map['rating']),  // 🔥 تحويل آمن
+      rating: _toInt(map['rating']), 
       commentAr: _toString(map['commentAr']),
       commentEn: _toString(map['commentEn']),
       icon: _toString(map['icon']),

@@ -1,5 +1,3 @@
-// lib/features/home/presentation/widgets/homework_card_widget.dart
-
 import 'package:flutter/material.dart';
 
 class HomeworkCardWidget extends StatelessWidget {

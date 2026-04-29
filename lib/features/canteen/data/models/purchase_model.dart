@@ -1,5 +1,3 @@
-// lib/features/canteen/data/models/purchase_model.dart
-
 import 'package:mica_school_app/features/canteen/domain/entities/canteen_month_entity.dart';
 
 class PurchaseModel extends PurchaseEntity {
@@ -10,7 +8,6 @@ class PurchaseModel extends PurchaseEntity {
     required super.time,
   });
 
-  // 🔥 دالة لتحويل أي نوع إلى double
   static double _toDouble(dynamic value) {
     if (value == null) return 0.0;
     if (value is double) return value;

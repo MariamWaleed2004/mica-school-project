@@ -8,11 +8,9 @@ import 'package:mica_school_app/features/authentication/domain/usecases/get_user
 part 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
-  // final UpdateUserUsecase updateUserUsecase;
   final GetUsersUsecase getUsersUsecase;
 
   UserCubit({
-    // required this.updateUserUsecase, 
     required this.getUsersUsecase,
     }) : super(UserInitial());
 

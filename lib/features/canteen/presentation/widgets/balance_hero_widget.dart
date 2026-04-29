@@ -1,5 +1,3 @@
-// lib/features/canteen/presentation/widgets/balance_hero_widget.dart
-
 import 'package:flutter/material.dart';
 import 'package:mica_school_app/features/canteen/presentation/widgets/donut_chart_widget.dart';
 import 'package:mica_school_app/features/canteen/presentation/widgets/month_picker_widget.dart';

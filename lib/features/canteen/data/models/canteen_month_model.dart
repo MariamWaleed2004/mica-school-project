@@ -1,5 +1,3 @@
-// lib/features/canteen/data/models/canteen_month_model.dart
-
 import 'package:mica_school_app/features/canteen/domain/entities/canteen_month_entity.dart';
 
 class CanteenMonthModel extends CanteenMonthEntity {
@@ -12,7 +10,6 @@ class CanteenMonthModel extends CanteenMonthEntity {
     required super.dailyPurchases,
   });
 
-  // 🔥 دالة لتحويل أي نوع إلى double
   static double _toDouble(dynamic value) {
     if (value == null) return 0.0;
     if (value is double) return value;
@@ -21,7 +18,6 @@ class CanteenMonthModel extends CanteenMonthEntity {
     return 0.0;
   }
 
-  // 🔥 دالة لتحويل أي نوع إلى List<double>
   static List<double> _toRatiosList(dynamic value) {
     if (value == null) return [0.4, 0.25, 0.2, 0.15];
     if (value is List) {
@@ -37,7 +33,7 @@ class CanteenMonthModel extends CanteenMonthEntity {
       savings: _toDouble(map['savings']),
       startBalance: _toDouble(map['startBalance']),
       ratios: _toRatiosList(map['ratios']),
-      dailyPurchases: {}, // هتتملأ بعدين
+      dailyPurchases: {}, 
     );
   }
 

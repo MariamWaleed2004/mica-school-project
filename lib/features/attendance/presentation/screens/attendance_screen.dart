@@ -4,7 +4,6 @@ import 'package:mica_school_app/features/attendance/presentation/cubit/attendanc
 import 'package:mica_school_app/features/attendance/presentation/cubit/attendance_log_cubit/attendance_log_state.dart';
 import 'package:mica_school_app/features/attendance/presentation/widgets/attendance_header_widget.dart';
 import 'package:mica_school_app/features/attendance/presentation/widgets/build_week_section_widget.dart';
-// 🔥 أضيفي الاستيراد
 
 class AttendanceScreen extends StatefulWidget {
   final bool isArabic;
@@ -25,7 +24,7 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> with SingleTickerProviderStateMixin {
-  int _selectedMonthIndex = 3; // أبريل
+  int _selectedMonthIndex = 3;
   late AnimationController _controller;
   late Animation<double> _fadeAnim;
 

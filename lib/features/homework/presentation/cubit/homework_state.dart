@@ -1,5 +1,3 @@
-// lib/features/homework/presentation/cubit/homework_state.dart
-
 import 'package:equatable/equatable.dart';
 import 'package:mica_school_app/features/homework/domain/entities/homework_entity.dart';
 

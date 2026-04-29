@@ -60,22 +60,6 @@ class _MainPageState extends State<MainPage> {
     await prefs.setString('saved_profile_image', path);
   }
 
-  // Future<void> _loadHardwareUid() async {
-  //   final firebaseUid = FirebaseAuth.instance.currentUser!.uid;
-  //   final doc = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(firebaseUid)
-  //       .get();
-
-  //   print("DOC EXISTS: ${doc.exists}");
-  //   print("DOC DATA: ${doc.data()}");
-
-  //   if (doc.exists) {
-  //     setState(() {
-  //       hardwareUid = doc['id'];
-  //     });
-  //   }
-  // }
 
   Future<void> _loadHardwareUid() async {
   final currentUser = FirebaseAuth.instance.currentUser;
@@ -214,38 +198,9 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  // List<Widget> _getPages() {
-  //   return [
-  //     HomeScreen(
-  //       isArabic: widget.isArabic,
-  //       profileImage: widget.profileImageUrl,
-  //       onNavigate: _handleNavigation,
-  //     ),
-  //     ProfileScreen(
-  //       isArabic: widget.isArabic,
-  //       texts: const {},
-  //     ),
-  //     CanteenScreen(
-  //       isArabic: widget.isArabic,
-  //       isDarkMode: widget.isDarkMode,
-  //       userId: FirebaseAuth.instance.currentUser!.uid,
-  //     ),
-  //     attendance.AttendanceScreen(
-  //       userId: hardwareUid!,
-  //       isArabic: widget.isArabic,
-  //       isDarkMode: widget.isDarkMode,
-  //       texts: const {},
-  //     ),
-  //     LogsPage(
-  //       isArabic: widget.isArabic,
-  //       isDarkMode: widget.isDarkMode,
-  //       profileImage: _profileImage,
-  //     ),
-  //   ];
-  // }
   List<Widget> _getPages() {
   final currentUser = FirebaseAuth.instance.currentUser;
-  final userId = currentUser?.uid ?? '';  // 🔥 استخدم ?. بدل !
+  final userId = currentUser?.uid ?? '';  
   
   return [
     HomeScreen(
@@ -260,10 +215,10 @@ class _MainPageState extends State<MainPage> {
     CanteenScreen(
       isArabic: widget.isArabic,
       isDarkMode: widget.isDarkMode,
-      userId: userId,  // 🔥 استخدم userId الآمن
+      userId: userId, 
     ),
     attendance.AttendanceScreen(
-      userId: hardwareUid ?? '',  // 🔥 استخدم ?? للقيمة الافتراضية
+      userId: hardwareUid ?? '', 
       isArabic: widget.isArabic,
       isDarkMode: widget.isDarkMode,
       texts: const {},
@@ -720,62 +675,17 @@ class _MainPageState extends State<MainPage> {
         const Spacer(),
         const Divider(height: 1),
         
-        // Logout button
-        // Padding(
-        //   padding: const EdgeInsets.all(12),
-        //   child: GestureDetector(
-        //     onTap: () => Navigator.pushReplacement(
-        //       context,
-        //       MaterialPageRoute(
-        //         builder: (_) => LoginScreen(isArabic: widget.isArabic),
-        //       ),
-        //     ),
-        //     child: Container(
-        //       width: double.infinity,
-        //       padding: const EdgeInsets.symmetric(vertical: 14),
-        //       decoration: BoxDecoration(
-        //         color: const Color(0xFFEF4444).withOpacity(0.08),
-        //         borderRadius: BorderRadius.circular(14),
-        //         border: Border.all(
-        //           color: const Color(0xFFEF4444).withOpacity(0.2),
-        //         ),
-        //       ),
-        //       child: Row(
-        //         mainAxisAlignment: MainAxisAlignment.center,
-        //         children: [
-        //           const Icon(
-        //             Icons.logout_rounded,
-        //             color: Color(0xFFEF4444),
-        //             size: 18,
-        //           ),
-        //           const SizedBox(width: 8),
-        //           Text(
-        //             widget.isArabic ? "تسجيل الخروج" : "Logout",
-        //             style: const TextStyle(
-        //               color: Color(0xFFEF4444),
-        //               fontWeight: FontWeight.bold,
-        //               fontSize: 14,
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        // Logout button - استخدم دالة منفصلة
+   
 Padding(
   padding: const EdgeInsets.all(12),
   child: GestureDetector(
     onTap: () async {
       try {
-        // تسجيل الخروج من Firebase
         await FirebaseAuth.instance.signOut();
         
-        // تحديث AuthCubit
         if (context.mounted) {
           context.read<AuthCubit>().loggedOut();
           
-          // الانتقال إلى شاشة تسجيل الدخول
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -837,67 +747,8 @@ Padding(
   );
 }
   // -------------------------------------------------- Drawer Item Widget ------------------------------------------------------------------------
-  // Widget _drawerItem(
-  //   IconData icon,
-  //   String title,
-  //   Color color,
-  //   bool isDark, {
-  //   required VoidCallback onTap,
-  // }) {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-  //     child: GestureDetector(
-  //       onTap: () async {
-  //     await FirebaseAuth.instance.signOut();
-      
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (_) => LoginScreen(isArabic: widget.isArabic),
-  //       ),
-  //     );},
-  //       child: Container(
-  //         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-  //         decoration: BoxDecoration(
-  //           color: isDark
-  //               ? Colors.white.withOpacity(0.04)
-  //               : Colors.grey.withOpacity(0.05),
-  //           borderRadius: BorderRadius.circular(14),
-  //         ),
-  //         child: Row(
-  //           children: [
-  //             Container(
-  //               width: 36,
-  //               height: 36,
-  //               decoration: BoxDecoration(
-  //                 color: color.withOpacity(0.12),
-  //                 borderRadius: BorderRadius.circular(10),
-  //               ),
-  //               child: Icon(icon, color: color, size: 18),
-  //             ),
-  //             const SizedBox(width: 14),
-  //             Text(
-  //               title,
-  //               style: TextStyle(
-  //                 fontWeight: FontWeight.w600,
-  //                 fontSize: 14,
-  //                 color: isDark ? Colors.white : const Color(0xFF0D1333),
-  //               ),
-  //             ),
-  //             const Spacer(),
-  //             Icon(
-  //               Icons.arrow_forward_ios_rounded,
-  //               size: 13,
-  //               color: isDark ? Colors.white30 : Colors.black26,
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
-  // -------------------------------------------------- Drawer Item Widget ------------------------------------------------------------------------
+
 Widget _drawerItem(
   IconData icon,
   String title,
@@ -908,7 +759,7 @@ Widget _drawerItem(
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
     child: GestureDetector(
-      onTap: onTap,  // 🔥 استخدم الـ onTap اللي جاي من برة
+      onTap: onTap,  
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
