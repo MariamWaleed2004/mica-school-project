@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mica_school_app/features/authentication/presentation/cubit/get_single_user_cubit/get_single_user_cubit.dart';
 
 class LogsPage extends StatefulWidget {
   final bool isArabic;
@@ -67,6 +70,10 @@ class _LogsPageState extends State<LogsPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    
+    // Fetch user data from Firebase
+    _loadUserData();
+    
     _fadeController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 600));
     _slideController = AnimationController(
@@ -77,6 +84,12 @@ class _LogsPageState extends State<LogsPage> with TickerProviderStateMixin {
             parent: _slideController, curve: Curves.easeOutCubic));
     _fadeController.forward();
     _slideController.forward();
+  }
+  
+  void _loadUserData() {
+    context.read<GetSingleUserCubit>().getSingleUser(
+      uid: FirebaseAuth.instance.currentUser!.uid,
+    );
   }
 
   @override
@@ -253,42 +266,46 @@ class _LogsPageState extends State<LogsPage> with TickerProviderStateMixin {
     final textColor = isDark ? Colors.white : const Color(0xFF0D1333);
     final bg = isDark ? const Color(0xFF090E1A) : const Color(0xFFF0F4FF);
 
-    return Directionality(
-      textDirection: isAr ? TextDirection.rtl : TextDirection.ltr,
-      child: Scaffold(
-        backgroundColor: bg,
-        body: Column(children: [
-          _buildHeader(context, isDark, currentData),
-          Expanded(
-            child: FadeTransition(
-              opacity: _fadeAnim,
-              child: SlideTransition(
-                position: _slideAnim,
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.fromLTRB(18, 20, 18, 40),
-                  child: Column(children: [
-                    _buildProfileCard(cardColor, textColor, isDark),
-                    const SizedBox(height: 18),
-                    _buildMonthPicker(cardColor, textColor, isDark),
-                    const SizedBox(height: 22),
-                    if (currentData['status'] == "released") ...[
-                      _buildStatsGrid(currentData, isDark),
-                      const SizedBox(height: 18),
-                      _buildGradesList(
-                          currentData['grades'], cardColor, textColor, isDark),
-                      const SizedBox(height: 18),
-                      _buildSummaryCard(isDark),
-                    ] else ...[
-                      _buildUpcomingState(currentData['expected']),
-                    ],
-                  ]),
+    return BlocBuilder<GetSingleUserCubit, GetSingleUserState>(
+      builder: (context, userState) {
+        return Directionality(
+          textDirection: isAr ? TextDirection.rtl : TextDirection.ltr,
+          child: Scaffold(
+            backgroundColor: bg,
+            body: Column(children: [
+              _buildHeader(context, isDark, currentData),
+              Expanded(
+                child: FadeTransition(
+                  opacity: _fadeAnim,
+                  child: SlideTransition(
+                    position: _slideAnim,
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.fromLTRB(18, 20, 18, 40),
+                      child: Column(children: [
+                        _buildProfileCard(cardColor, textColor, isDark, userState),
+                        const SizedBox(height: 18),
+                        _buildMonthPicker(cardColor, textColor, isDark),
+                        const SizedBox(height: 22),
+                        if (currentData['status'] == "released") ...[
+                          _buildStatsGrid(currentData, isDark),
+                          const SizedBox(height: 18),
+                          _buildGradesList(
+                              currentData['grades'], cardColor, textColor, isDark),
+                          const SizedBox(height: 18),
+                          _buildSummaryCard(isDark),
+                        ] else ...[
+                          _buildUpcomingState(currentData['expected']),
+                        ],
+                      ]),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ]),
           ),
-        ]),
-      ),
+        );
+      },
     );
   }
 
@@ -407,7 +424,22 @@ class _LogsPageState extends State<LogsPage> with TickerProviderStateMixin {
       );
 
   // ─── Profile Card ────────────────────────────────────────────────
-  Widget _buildProfileCard(Color cardColor, Color textColor, bool isDark) {
+  Widget _buildProfileCard(Color cardColor, Color textColor, bool isDark, GetSingleUserState userState) {
+    // Get user name from Firebase
+    String userName = "";
+    
+    if (userState is GetSingleUserLoaded) {
+      final user = userState.user;
+      // Get name based on language
+      userName = widget.isArabic 
+          ? (user.nameAr ?? "اسم المستخدم") 
+          : (user.nameEn ?? "User Name");
+    } else if (userState is GetSingleUserLoading) {
+      userName = widget.isArabic ? "جاري التحميل..." : "Loading...";
+    } else {
+      userName = widget.isArabic ? "اسم المستخدم" : "User Name";
+    }
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -426,42 +458,46 @@ class _LogsPageState extends State<LogsPage> with TickerProviderStateMixin {
         child: Column(children: [
           Row(children: [
             // Avatar with blue ring
-            // Container(
-            //   padding: const EdgeInsets.all(3),
-            //   decoration: BoxDecoration(
-            //     shape: BoxShape.circle,
-            //     border: Border.all(color: blue, width: 2.5),
-            //   ),
-            //   child: Container(
-            //     width: 62,
-            //     height: 62,
-            //     decoration: const BoxDecoration(shape: BoxShape.circle),
-            //     child: ClipOval(
-            //       child: widget.profileImage != null
-            //           ? (kIsWeb
-            //               ? Image.network(widget.profileImage!.path,
-            //                   fit: BoxFit.cover, width: 62, height: 62)
-            //               : Image.file(File(widget.profileImage!.path),
-            //                   fit: BoxFit.cover, width: 62, height: 62))
-            //           : Container(
-            //               decoration: const BoxDecoration(
-            //                 gradient: LinearGradient(
-            //                   colors: [primary, accent],
-            //                   begin: Alignment.topLeft,
-            //                   end: Alignment.bottomRight,
-            //                 ),
-            //               ),
-            //               child: const Center(
-            //                 child: Text("س",
-            //                     style: TextStyle(
-            //                         color: Colors.white,
-            //                         fontSize: 24,
-            //                         fontWeight: FontWeight.bold)),
-            //               ),
-            //             ),
-            //     ),
-            //   ),
-            // ),
+            Container(
+              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: blue, width: 2.5),
+              ),
+              child: Container(
+                width: 62,
+                height: 62,
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: ClipOval(
+                  child: widget.profileImage != null
+                      ? (kIsWeb
+                          ? Image.network(widget.profileImage!.path,
+                              fit: BoxFit.cover, width: 62, height: 62)
+                          : Image.file(File(widget.profileImage!.path),
+                              fit: BoxFit.cover, width: 62, height: 62))
+                      : Container(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [primary, accent],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              userName.isNotEmpty && userName != "Loading..." && userName != "جاري التحميل..."
+                                  ? (userName.isNotEmpty ? userName.substring(0, 1).toUpperCase() : "?")
+                                  : "?",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                ),
+              ),
+            ),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -470,9 +506,7 @@ class _LogsPageState extends State<LogsPage> with TickerProviderStateMixin {
                     : CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.isArabic
-                        ? "سلمى أحمد محمد علي"
-                        : "Salma Ahmed Mohamed Ali",
+                    userName,
                     style: TextStyle(
                         color: textColor,
                         fontSize: 15,
@@ -1288,4 +1322,3 @@ class ExamsDetailPage extends StatelessWidget {
     );
   }
 }
-

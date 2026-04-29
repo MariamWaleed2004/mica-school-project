@@ -487,7 +487,8 @@ class _MainPageState extends State<MainPage> {
   }
 
   // -------------------------------------------------- Drawer Widget ------------------------------------------------------------------------
-  Widget _buildDrawer(BuildContext context, bool isDark) {
+// -------------------------------------------------- Drawer Widget ------------------------------------------------------------------------
+Widget _buildDrawer(BuildContext context, bool isDark) {
   return Drawer(
     backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
     child: Column(
@@ -519,7 +520,10 @@ class _MainPageState extends State<MainPage> {
                       
                       if (state is GetSingleUserLoaded) {
                         imageUrl = state.user.profileImageUrl;
-                        userName = state.user.nameAr ?? state.user.nameEn;
+                        // ✅ Modified: Show name based on selected language
+                        userName = widget.isArabic 
+                            ? (state.user.nameAr ?? state.user.nameEn ?? "Mica User")
+                            : (state.user.nameEn ?? state.user.nameAr ?? "Mica User");
                       }
                       
                       return Column(
@@ -675,72 +679,71 @@ class _MainPageState extends State<MainPage> {
         const Spacer(),
         const Divider(height: 1),
         
-   
-Padding(
-  padding: const EdgeInsets.all(12),
-  child: GestureDetector(
-    onTap: () async {
-      try {
-        await FirebaseAuth.instance.signOut();
-        
-        if (context.mounted) {
-          context.read<AuthCubit>().loggedOut();
-          
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => LoginScreen(isArabic: widget.isArabic),
-            ),
-          );
-        }
-      } catch (e) {
-        print("Logout error: $e");
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                widget.isArabic 
-                  ? "حدث خطأ أثناء تسجيل الخروج" 
-                  : "Error during logout",
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () async {
+              try {
+                await FirebaseAuth.instance.signOut();
+                
+                if (context.mounted) {
+                  context.read<AuthCubit>().loggedOut();
+                  
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => LoginScreen(isArabic: widget.isArabic),
+                    ),
+                  );
+                }
+              } catch (e) {
+                print("Logout error: $e");
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        widget.isArabic 
+                          ? "حدث خطأ أثناء تسجيل الخروج" 
+                          : "Error during logout",
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              decoration: BoxDecoration(
+                color: const Color(0xFFEF4444).withOpacity(0.08),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: const Color(0xFFEF4444).withOpacity(0.2),
+                ),
               ),
-              backgroundColor: Colors.red,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.logout_rounded,
+                    color: Color(0xFFEF4444),
+                    size: 18,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.isArabic ? "تسجيل الخروج" : "Sign out",
+                    style: const TextStyle(
+                      color: Color(0xFFEF4444),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          );
-        }
-      }
-    },
-    child: Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      decoration: BoxDecoration(
-        color: const Color(0xFFEF4444).withOpacity(0.08),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: const Color(0xFFEF4444).withOpacity(0.2),
+          ),
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.logout_rounded,
-            color: Color(0xFFEF4444),
-            size: 18,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            widget.isArabic ? "تسجيل الخروج" : "Logout",
-            style: const TextStyle(
-              color: Color(0xFFEF4444),
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-        ],
-      ),
-    ),
-  ),
-),
         const SizedBox(height: 10),
       ],
     ),

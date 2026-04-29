@@ -31,18 +31,13 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnim;
+  final RefreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
 
-    context.read<GetSingleUserCubit>().getSingleUser(
-      uid: FirebaseAuth.instance.currentUser!.uid,
-    );
-
-    context.read<TeacherRatingCubit>().getTeacherRatings(
-      FirebaseAuth.instance.currentUser!.uid,
-    );
+    _loadData();
 
     _controller = AnimationController(
       vsync: this,
@@ -50,6 +45,20 @@ class _HomeScreenState extends State<HomeScreen>
     );
     _fadeAnim = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
     _controller.forward();
+  }
+
+  Future<void> _loadData() async {
+    context.read<GetSingleUserCubit>().getSingleUser(
+      uid: FirebaseAuth.instance.currentUser!.uid,
+    );
+
+    context.read<TeacherRatingCubit>().getTeacherRatings(
+      FirebaseAuth.instance.currentUser!.uid,
+    );
+  }
+
+  Future<void> _onRefresh() async {
+    await _loadData();
   }
 
   @override
@@ -78,122 +87,131 @@ class _HomeScreenState extends State<HomeScreen>
 
           return Scaffold(
             backgroundColor: bg,
-            body: FadeTransition(
-              opacity: _fadeAnim,
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Header
-                    BuildHeaderWidget(
-                      isDark: false,
-                      isArabic: widget.isArabic,
-                      profileImageUrl:
-                          widget.profileImage ?? user.profileImageUrl,
-                      nameAr: user.nameAr ?? "UserAr",
-                      nameEn: user.nameEn ?? "UserEN",
-                      isActive: user.isActive ?? false,
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Grade Badge
-                          BuildGradeBadgeWidget(
-                            isArabic: widget.isArabic,
-                            isDark: isDark,
-                            cardColor: cardColor,
-                            textColor: textColor,
-                            gradeAr: user.gradeAr ?? 'gradeAr',
-                            gradeEn: user.gradeEn ?? 'gradeEn',
-                            gradeNum: user.gradeNum ?? 'gradeNum',
-                            majorEn: user.majorEn ?? 'majorEn',
-                            majorAr: user.majorAr ?? 'majorAr',
-                          ),
-                          const SizedBox(height: 24),
-
-                          // Schedule Section
-                          SectionLabelWidget(
-                            text: widget.isArabic ? "جدولك" : "Your Schedule",
-                            color: textColor,
-                          ),
-                          const SizedBox(height: 12),
-
-                          ScheduleCardWidget(
-                            isDark: isDark,
-                            isArabic: widget.isArabic,
-                            onNavigate: widget.onNavigate,
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          // Fees Section
-                          SectionLabelWidget(
-                            text: widget.isArabic ? "مصاريفك" : "Your Fees",
-                            color: textColor,
-                          ),
-                          const SizedBox(height: 12),
-                          FeesCardWidget(
-                            isDark: isDark,
-                            isArabic: widget.isArabic,
-                            cardColor: cardColor,
-                            textColor: textColor,
-                            onTap: () => widget.onNavigate('fees'),
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          // Homework Section
-                          SectionLabelWidget(
-                            text: widget.isArabic ? "الواجبات" : "Homework",
-                            color: textColor,
-                          ),
-                          const SizedBox(height: 12),
-                            HomeworkCardWidget(
-                            isDark: isDark,
-                            isArabic: widget.isArabic,
-                            cardColor: cardColor,
-                            textColor: textColor,
-                            onTap: () => widget.onNavigate(
-                              'homework',
-                            ), // هذا سينادي الـ handleNavigation
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          // Teacher Ratings Section
-                          SectionLabelWidget(
-                            text: widget.isArabic
-                                ? "⭐ تقييمات المدرسين"
-                                : "⭐ Teacher Ratings",
-                            color: textColor,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            widget.isArabic
-                                ? "تقييمات المدرسين لك"
-                                : "Teacher evaluations for you",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: textColor.withOpacity(0.45),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          TeacherRatingsSectionWidget(
-                            isArabic: widget.isArabic,
-                            isDark: isDark,
-                            cardColor: cardColor,
-                            textColor: textColor,
-                          ),
-
-                          const SizedBox(height: 40),
-                        ],
+            body: RefreshIndicator(
+              key: RefreshIndicatorKey,
+              onRefresh: _onRefresh,
+              color: Colors.white,
+              backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+              strokeWidth: 2,
+              child: FadeTransition(
+                opacity: _fadeAnim,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(
+                    parent: BouncingScrollPhysics(),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header
+                      BuildHeaderWidget(
+                        isDark: false,
+                        isArabic: widget.isArabic,
+                        profileImageUrl:
+                            widget.profileImage ?? user.profileImageUrl,
+                        nameAr: user.nameAr ?? "UserAr",
+                        nameEn: user.nameEn ?? "UserEN",
+                        isActive: user.isActive ?? false,
                       ),
-                    ),
-                  ],
+
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Grade Badge
+                            BuildGradeBadgeWidget(
+                              isArabic: widget.isArabic,
+                              isDark: isDark,
+                              cardColor: cardColor,
+                              textColor: textColor,
+                              gradeAr: user.gradeAr ?? 'gradeAr',
+                              gradeEn: user.gradeEn ?? 'gradeEn',
+                              gradeNum: user.gradeNum ?? 'gradeNum',
+                              majorEn: user.majorEn ?? 'majorEn',
+                              majorAr: user.majorAr ?? 'majorAr',
+                            ),
+                            const SizedBox(height: 24),
+
+                            // Schedule Section
+                            SectionLabelWidget(
+                              text: widget.isArabic ? "جدولك" : "Your Schedule",
+                              color: textColor,
+                            ),
+                            const SizedBox(height: 12),
+
+                            ScheduleCardWidget(
+                              isDark: isDark,
+                              isArabic: widget.isArabic,
+                              onNavigate: widget.onNavigate,
+                            ),
+
+                            const SizedBox(height: 24),
+
+                            // Fees Section
+                            SectionLabelWidget(
+                              text: widget.isArabic ? "مصاريفك" : "Your Fees",
+                              color: textColor,
+                            ),
+                            const SizedBox(height: 12),
+                            FeesCardWidget(
+                              isDark: isDark,
+                              isArabic: widget.isArabic,
+                              cardColor: cardColor,
+                              textColor: textColor,
+                              onTap: () => widget.onNavigate('fees'),
+                            ),
+
+                            const SizedBox(height: 24),
+
+                            // Homework Section
+                            SectionLabelWidget(
+                              text: widget.isArabic ? "الواجبات" : "Homework",
+                              color: textColor,
+                            ),
+                            const SizedBox(height: 12),
+                            HomeworkCardWidget(
+                              isDark: isDark,
+                              isArabic: widget.isArabic,
+                              cardColor: cardColor,
+                              textColor: textColor,
+                              onTap: () => widget.onNavigate(
+                                'homework',
+                              ),
+                            ),
+
+                            const SizedBox(height: 24),
+
+                            // Teacher Ratings Section
+                            SectionLabelWidget(
+                              text: widget.isArabic
+                                  ? "⭐ تقييمات المدرسين"
+                                  : "⭐ Teacher Ratings",
+                              color: textColor,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              widget.isArabic
+                                  ? "تقييمات المدرسين لك"
+                                  : "Teacher evaluations for you",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: textColor.withOpacity(0.45),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            TeacherRatingsSectionWidget(
+                              isArabic: widget.isArabic,
+                              isDark: isDark,
+                              cardColor: cardColor,
+                              textColor: textColor,
+                            ),
+
+                            const SizedBox(height: 40),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
